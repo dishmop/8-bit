@@ -66,33 +66,6 @@ public class TestComponent : GateComponent
 
 
 
-        nand12 = ((GameObject)Instantiate(Resources.Load("nandgate"), new Vector3(0, -200), new Quaternion())).GetComponent<GateComponent>();
-        nand22 = ((GameObject)Instantiate(Resources.Load("nandgate"), new Vector3(0, -300), new Quaternion())).GetComponent<GateComponent>();
-
-        io12 = ((GameObject)Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
-        io22 = ((GameObject)Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
-
-        in12 = ((GameObject)Instantiate(Resources.Load("ininconnector"))).GetComponent<InputInputConnectorComponent>();
-        in22 = ((GameObject)Instantiate(Resources.Load("ininconnector"))).GetComponent<InputInputConnectorComponent>();
-
-        out12 = ((GameObject)Instantiate(Resources.Load("outoutconnector"))).GetComponent<OutputOutputConnectorComponent>();
-        out22 = ((GameObject)Instantiate(Resources.Load("outoutconnector"))).GetComponent<OutputOutputConnectorComponent>();
-
-        empty2 = ((GameObject)Instantiate(Resources.Load("empty"))).GetComponent<EmptyGateComponent>();
-
-        empty2.numInputs = 2;
-        empty2.numOutputs = 2;
-
-        empty2.setup();
-
-
-        empty2.gate.AddGate(nand12.gate);
-        empty2.gate.AddGate(nand22.gate);
-
-
-
-
-
 
         empty = ((GameObject)Instantiate(Resources.Load("empty"))).GetComponent<EmptyGateComponent>();
         empty.numInputs = 2;
@@ -101,7 +74,6 @@ public class TestComponent : GateComponent
 
 
         empty.gate.AddGate(empty1.gate);
-        empty.gate.AddGate(empty2.gate);
 
         gate = new Gate();
         gate.AddGate(empty.gate);
@@ -122,14 +94,6 @@ public class TestComponent : GateComponent
 
 
 
-        empty2.gate.ConnectInput(0, nand12.gate, 0, (InputInputConnector)in12.connector);
-        empty2.gate.ConnectInput(1, nand22.gate, 1, (InputInputConnector)in22.connector);
-
-        empty2.gate.Connect(nand22.gate, 0, nand12.gate, 1, (InputOutputConnector)io12.connector);
-        empty2.gate.Connect(nand12.gate, 0, nand22.gate, 0, (InputOutputConnector)io22.connector);
-
-        empty2.gate.ConnectOutput(nand12.gate, 0, 0, (OutputOutputConnector)out12.connector);
-        empty2.gate.ConnectOutput(nand22.gate, 0, 1, (OutputOutputConnector)out22.connector);
 
 
         in12 = ((GameObject)Instantiate(Resources.Load("ininconnector"))).GetComponent<InputInputConnectorComponent>();
@@ -147,19 +111,6 @@ public class TestComponent : GateComponent
         empty.gate.ConnectOutput(empty1.gate, 1, 1, (OutputOutputConnector)out22.connector);
 
 
-        in12 = ((GameObject)Instantiate(Resources.Load("ininconnector"))).GetComponent<InputInputConnectorComponent>();
-        in22 = ((GameObject)Instantiate(Resources.Load("ininconnector"))).GetComponent<InputInputConnectorComponent>();
-
-
-
-
-        empty.gate.ConnectInput(0, empty2.gate, 0, (InputInputConnector)in12.connector);
-        empty.gate.ConnectInput(1, empty2.gate, 1, (InputInputConnector)in22.connector);
-
-        //empty.gate.ConnectOutput(empty2.gate, 0, 0, (OutputOutputConnector)out12.connector);
-        //empty.gate.ConnectOutput(empty2.gate, 1, 1, (OutputOutputConnector)out22.connector);
-
-
 
 
 
@@ -169,6 +120,17 @@ public class TestComponent : GateComponent
 
     new void Update()
     {
+        if(UnityEngine.Input.GetKeyDown(KeyCode.Space))
+        {
+            gate.gates[0].Load("testsave");
+            gate.Save("thirstest");
+        }
+
+        if(UnityEngine.Input.GetKeyDown(KeyCode.S))
+        {
+            gate.Save("testloadsave");
+        }
+
         inputs[0] = input1;
         inputs[1] = input2;
 

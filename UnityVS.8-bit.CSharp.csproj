@@ -60,12 +60,6 @@
     <Reference Include="UnityEngine.Analytics">
       <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
     </Reference>
@@ -76,8 +70,10 @@
   <ItemGroup>
     <Compile Include="Assets\ConnectorComponent.cs" />
     <Compile Include="Assets\EmptyGateComponent.cs" />
+    <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\InputInputConnectorComponent.cs" />
     <Compile Include="Assets\InputOutputConnectorComponent.cs" />
+    <Compile Include="Assets\MoveCamera.cs" />
     <Compile Include="Assets\NAND.cs" />
     <Compile Include="Assets\OutputOutputConnectorComponent.cs" />
     <Compile Include="Assets\TestComponent.cs" />

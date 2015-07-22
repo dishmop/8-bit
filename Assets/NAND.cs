@@ -6,11 +6,11 @@ public class NandGate : Gate
     public NandGate()
     {
         // two inputs
-        ownInputs.Add(0);
-        ownInputs.Add(1);
+        AddInput(0);
+        AddInput(1);
 
         // one output
-        ownOutputs.Add(0);
+        AddOutput(0);
     }
 
     protected override void UpdateOutputs()

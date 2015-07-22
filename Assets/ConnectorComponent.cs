@@ -46,4 +46,20 @@ public abstract class ConnectorComponent : MonoBehaviour {
 
         line.Draw();
     }
+
+    void OnDisable()
+    {
+        if (line != null)
+        {
+            line.active = false;
+        }
+    }
+
+    void OnEnable()
+    {
+        if (line != null)
+        {
+            line.active = true;
+        }
+    }
 }
