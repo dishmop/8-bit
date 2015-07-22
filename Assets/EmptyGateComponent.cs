@@ -9,14 +9,13 @@ public class EmptyGateComponent : GateComponent {
 
     public int spritenum = -1;
 
+    public int extrawidth = 0;
+
 
     void Awake()
     {
         gate = new Gate();
         gate.component = this;
-
-        if(spritenum>=0)
-            GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("gates")[spritenum];
     }
 
     public void setup()
@@ -70,19 +69,22 @@ public class EmptyGateComponent : GateComponent {
 
             outputpoints.Add(point);
         }
+
+        if (spritenum >= 0)
+            GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("gates")[spritenum];
     }
 
     new void Update()
     {
         for (int i = 0; i < numInputs; i++)
         {
-            inputoffsets[i] = new Vector3(-50*(4-gate.depth), -100*i);
+            inputoffsets[i] = new Vector3(-extrawidth-50*(4-gate.depth), -60*i + 30*(numInputs-1));
             inputpoints[i].transform.position = transform.position + inputoffsets[i];
         }
 
         for (int i = 0; i < numOutputs; i++)
         {
-            outputoffsets[i] = new Vector3(50 * (4 - gate.depth), -100 * i);
+            outputoffsets[i] = new Vector3(extrawidth + 50 * (4 - gate.depth), -60 * i + 30 * (numOutputs-1));
             outputpoints[i].transform.position = transform.position + outputoffsets[i];
         }
 

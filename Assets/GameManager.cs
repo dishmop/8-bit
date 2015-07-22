@@ -6,14 +6,22 @@ using Vectrosity;
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
 
-    bool connecting;
     VectorLine line;
 
     public InputOutputCollider current;
 
+    public GateComponent currentComponent;
+
     InputOutputCollider first;
 
     public Collider2D hitcollider;
+
+    bool moving;
+    GateComponent movingcomp;
+
+    public static string[] gatenames = { "AND", "NAND", "NOT", "OR", "ignore", "S'R'" };
+
+    public TopComponent topComponent;
 
     void Start ()
     {
@@ -24,13 +32,11 @@ public class GameManager : MonoBehaviour {
         line.color = Color.black;
     }
 	
-	// Update is called once per frame
 	void Update () {
 	    if(UnityEngine.Input.GetKeyDown(KeyCode.Mouse0))
         {
             if (current != null)
             {
-                connecting = true;
                 line.points2[0] = UnityEngine.Input.mousePosition;
 
                 first = current;
@@ -39,9 +45,7 @@ public class GameManager : MonoBehaviour {
 
         if(UnityEngine.Input.GetKeyUp(KeyCode.Mouse0))
         {
-            connecting = false;
-
-            if(current!=null)
+            if(current!=null && first!=null)
             {
                 // connect two components same level
                 if(first.attachedGate.parentGate == current.attachedGate.parentGate)
@@ -96,9 +100,28 @@ public class GameManager : MonoBehaviour {
                     }
                 }
             }
+
+            first = null;
         }
 
-        if(connecting)
+        if(UnityEngine.Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if(currentComponent!=null)
+            {
+                movingcomp = currentComponent;
+            }
+        }
+        if(UnityEngine.Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            movingcomp = null;
+        }
+
+        if(movingcomp!=null)
+        {
+            movingcomp.transform.position = movingcomp.transform.position + 10*new Vector3(UnityEngine.Input.GetAxis("Mouse X"), UnityEngine.Input.GetAxis("Mouse Y"),0);
+        }
+
+        if(first!=null)
         {
             line.active = true;
 
@@ -117,6 +140,7 @@ public class GameManager : MonoBehaviour {
         if(hit.collider == null)
         {
             current = null;
+            currentComponent = null;
         }
         hitcollider = hit.collider;
 	}

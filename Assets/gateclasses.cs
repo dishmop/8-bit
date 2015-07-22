@@ -260,9 +260,9 @@ public class Gate {
         {
             connector = new InputOutputConnector();
         }
-        if (childOutputs[outputFrom.ownOutputs[outputNum]].connector!= -1)
+        if (childInputs[inputTo.ownInputs[inputNum]].connector != -1)
         {
-            throw new System.ArgumentException("each output can only be connected to one input!");
+            throw new System.ArgumentException("each input can only be connected to one output!");
         }
 
         int connectorNum = 0;
@@ -365,8 +365,8 @@ public class Gate {
         {
             if (parentGate.childOutputs[output.Value].inputConnector >= 0)
                 parentGate.childOutputs[output.Value].IsOnNew = connectors[parentGate.childOutputs[output.Value].inputConnector].IsOn;
-            else
-                Debug.Log("problem!");
+//            else
+//                Debug.Log("problem!");
         }
     }
 
@@ -385,6 +385,16 @@ public class Gate {
 
     public void Save(string name)
     {
+        int spritenum = -1;
+        // test if the name is recognised
+        for(int i=0; i<GameManager.gatenames.Length; i++)
+        {
+            if(name == GameManager.gatenames[i])
+            {
+                spritenum = i;
+            }
+        }
+
         XmlWriterSettings settings = new XmlWriterSettings();
         settings.Indent = true;
         settings.IndentChars = ("\t");
@@ -393,7 +403,7 @@ public class Gate {
         XmlWriter writer = XmlWriter.Create(Application.persistentDataPath + "/" + name + ".xml", settings);
         writer.WriteStartDocument();
 
-        Save(writer,0);
+        Save(writer,0,0, spritenum);
 
         writer.WriteEndDocument();
         writer.Close();
@@ -401,11 +411,17 @@ public class Gate {
         Debug.Log("Saved to " + Application.persistentDataPath + "/" + name + ".xml");
     }
 
-    public void Save(XmlWriter writer, int index)
+    public void Save(XmlWriter writer, int index, int depth, int spritenum)
     {
         writer.WriteStartElement("gate");
         writer.WriteAttributeString("index", index.ToString());
         writer.WriteAttributeString("type", this.GetType().ToString());
+
+        if(depth==1)
+        {
+            // STORE SPRITENUM HERE
+            writer.WriteAttributeString("spritenum", spritenum.ToString());
+        }
 
         int x = 0;
         int y = 0;
@@ -460,7 +476,7 @@ public class Gate {
 
         foreach(KeyValuePair<int, Gate> gate in gates)
         {
-            gate.Value.Save(writer, gate.Key);
+            gate.Value.Save(writer, gate.Key, depth+1, spritenum);
         }
 
         writer.WriteEndElement();
@@ -489,6 +505,11 @@ public class Gate {
                 if(child.Attributes["type"].Value == "Gate")
                 {
                     component = ((GameObject)Object.Instantiate(Resources.Load("empty"))).GetComponent<EmptyGateComponent>();
+                
+                    if(child.Attributes["spritenum"]!=null)
+                    {
+                        ((EmptyGateComponent)component).spritenum = System.Int32.Parse(child.Attributes["spritenum"].Value);
+                    }
                 } else if(child.Attributes["type"].Value == "NandGate")
                 {
                     component = ((GameObject)Object.Instantiate(Resources.Load("nandgate"))).GetComponent<NAND>();
@@ -682,6 +703,7 @@ public abstract class GateComponent : MonoBehaviour
 
     public bool visible = true;
     bool oldVisible;
+    public bool showChildren = false;
 
     public void Update()
     {
@@ -689,36 +711,33 @@ public abstract class GateComponent : MonoBehaviour
 
         if(visible)
         {
-            if (GetComponent<Renderer>()!=null)
+            if (GetComponent<Renderer>() != null)
+            {
                 GetComponent<Renderer>().enabled = true;
+            }
+
+            if(GetComponent<Collider2D>()!=null)
+            {
+                GetComponent<Collider2D>().enabled = true;
+
+                if (GameManager.instance.hitcollider == GetComponent<Collider2D>())
+                    GameManager.instance.currentComponent = this;
+            }
         }
         else
         {
-            if (GetComponent<Renderer>()!=null)
+            if (GetComponent<Renderer>() != null)
+            {
                 GetComponent<Renderer>().enabled = false;
-        }
-
-        if(!visible && oldVisible)
-        {
-            foreach(GateComponent component in GetComponentsInChildren<GateComponent>())
-            {
-                if (component == this) continue;
-
-                component.visible = false;
             }
 
-            foreach (ConnectorComponent component in GetComponentsInChildren<ConnectorComponent>())
+            if (GetComponent<Collider2D>() != null)
             {
-                component.visible = false;
-            }
-
-            foreach (InputOutputCollider component in GetComponentsInChildren<InputOutputCollider>())
-            {
-                component.visible = false;
+                GetComponent<Collider2D>().enabled = false;
             }
         }
 
-        if (visible && !oldVisible)
+        if (showChildren)
         {
             foreach (GateComponent component in GetComponentsInChildren<GateComponent>())
             {
@@ -735,6 +754,26 @@ public abstract class GateComponent : MonoBehaviour
             foreach (InputOutputCollider component in GetComponentsInChildren<InputOutputCollider>())
             {
                 component.visible = true;
+            }
+        }
+
+        if (visible && !oldVisible)
+        {
+            foreach (GateComponent component in GetComponentsInChildren<GateComponent>())
+            {
+                if (component == this) continue;
+
+                component.visible = false;
+            }
+
+            foreach (ConnectorComponent component in GetComponentsInChildren<ConnectorComponent>())
+            {
+                component.visible = false;
+            }
+
+            foreach (InputOutputCollider component in GetComponentsInChildren<InputOutputCollider>())
+            {
+                component.visible = false;
             }
         }
 

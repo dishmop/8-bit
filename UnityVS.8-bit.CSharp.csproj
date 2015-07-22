@@ -74,11 +74,15 @@
     <Compile Include="Assets\InputInputConnectorComponent.cs" />
     <Compile Include="Assets\InputOutputCollider.cs" />
     <Compile Include="Assets\InputOutputConnectorComponent.cs" />
+    <Compile Include="Assets\Menu.cs" />
     <Compile Include="Assets\MoveCamera.cs" />
     <Compile Include="Assets\NAND.cs" />
+    <Compile Include="Assets\OnOffButton.cs" />
     <Compile Include="Assets\OutputOutputConnectorComponent.cs" />
-    <Compile Include="Assets\TestComponent.cs" />
+    <Compile Include="Assets\SaveButton.cs" />
+    <Compile Include="Assets\TopComponent.cs" />
     <Compile Include="Assets\gateclasses.cs" />
+    <Compile Include="Assets\menuItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>
