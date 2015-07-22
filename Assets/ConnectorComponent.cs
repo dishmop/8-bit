@@ -5,6 +5,8 @@ using Vectrosity;
 public abstract class ConnectorComponent : MonoBehaviour {
     public  Connector connector;
 
+    public bool visible = true;
+
     protected Vector3 from;
     protected Vector3 to;
 
@@ -44,22 +46,14 @@ public abstract class ConnectorComponent : MonoBehaviour {
             line.color = Color.black;
         }
 
-        line.Draw();
-    }
-
-    void OnDisable()
-    {
-        if (line != null)
-        {
-            line.active = false;
-        }
-    }
-
-    void OnEnable()
-    {
-        if (line != null)
+        if (visible)
         {
             line.active = true;
+            line.Draw();
+        }
+        else
+        {
+            line.active = false;
         }
     }
 }

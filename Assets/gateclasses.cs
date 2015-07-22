@@ -680,9 +680,65 @@ public abstract class GateComponent : MonoBehaviour
     public int numInputs;
     public int numOutputs;
 
+    public bool visible = true;
+    bool oldVisible;
+
     public void Update()
     {
         gate.Update();
+
+        if(visible)
+        {
+            if (GetComponent<Renderer>()!=null)
+                GetComponent<Renderer>().enabled = true;
+        }
+        else
+        {
+            if (GetComponent<Renderer>()!=null)
+                GetComponent<Renderer>().enabled = false;
+        }
+
+        if(!visible && oldVisible)
+        {
+            foreach(GateComponent component in GetComponentsInChildren<GateComponent>())
+            {
+                if (component == this) continue;
+
+                component.visible = false;
+            }
+
+            foreach (ConnectorComponent component in GetComponentsInChildren<ConnectorComponent>())
+            {
+                component.visible = false;
+            }
+
+            foreach (InputOutputCollider component in GetComponentsInChildren<InputOutputCollider>())
+            {
+                component.visible = false;
+            }
+        }
+
+        if (visible && !oldVisible)
+        {
+            foreach (GateComponent component in GetComponentsInChildren<GateComponent>())
+            {
+                if (component == this) continue;
+
+                component.visible = true;
+            }
+
+            foreach (ConnectorComponent component in GetComponentsInChildren<ConnectorComponent>())
+            {
+                component.visible = true;
+            }
+
+            foreach (InputOutputCollider component in GetComponentsInChildren<InputOutputCollider>())
+            {
+                component.visible = true;
+            }
+        }
+
+        oldVisible = visible;
     }
 
     void LateUpdate()

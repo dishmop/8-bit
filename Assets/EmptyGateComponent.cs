@@ -7,11 +7,16 @@ public class EmptyGateComponent : GateComponent {
     List<GameObject> inputpoints = new List<GameObject>();
     List<GameObject> outputpoints = new List<GameObject>();
 
+    public int spritenum = -1;
+
 
     void Awake()
     {
         gate = new Gate();
         gate.component = this;
+
+        if(spritenum>=0)
+            GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("gates")[spritenum];
     }
 
     public void setup()

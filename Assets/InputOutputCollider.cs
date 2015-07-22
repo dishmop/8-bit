@@ -6,13 +6,23 @@ public class InputOutputCollider : MonoBehaviour {
     public bool isInput; // otherwise output
     public int inputOutputNum;
 
+    public bool visible = true;
+
     bool mouseOver;
 	
 	void Update()
     {
-        if (GameManager.instance.hitcollider == GetComponent<Collider2D>())
+        if (visible)
         {
-            GameManager.instance.current = this;
+            if (GameManager.instance.hitcollider == GetComponent<Collider2D>())
+            {
+                GameManager.instance.current = this;
+            }
+            GetComponent<Renderer>().enabled = true;
+        }
+        else
+        {
+            GetComponent<Renderer>().enabled = false;
         }
     }
 }

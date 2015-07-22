@@ -30,5 +30,7 @@ public class NAND : GateComponent
         inputoffsets.Add(new Vector3(-20, -11));
 
         outputoffsets.Add(new Vector3(30,-1));
+
+        GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("gates")[1];
     }
 }
