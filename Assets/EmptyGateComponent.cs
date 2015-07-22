@@ -36,7 +36,15 @@ public class EmptyGateComponent : GateComponent {
             inputoffsets.Add(new Vector3(-100, -100 * i));
 
             GameObject point = (GameObject)Instantiate(Resources.Load("inout"), transform.position + inputoffsets[i], new Quaternion());
-            point.transform.parent = transform;
+
+            if (gate.parentGate != null && gate.parentGate.component != null)
+            {
+                point.transform.parent = gate.parentGate.component.transform;
+            }
+
+            point.GetComponent<InputOutputCollider>().attachedGate = gate;
+            point.GetComponent<InputOutputCollider>().inputOutputNum = i;
+            point.GetComponent<InputOutputCollider>().isInput = true;
 
             inputpoints.Add(point);
         }
@@ -46,7 +54,14 @@ public class EmptyGateComponent : GateComponent {
             outputoffsets.Add(new Vector3(100, -100 * i));
 
             GameObject point = (GameObject)Instantiate(Resources.Load("inout"), transform.position + outputoffsets[i], new Quaternion());
-            point.transform.parent = transform;
+            if (gate.parentGate != null && gate.parentGate.component != null)
+            {
+                point.transform.parent = gate.parentGate.component.transform;
+            }
+
+            point.GetComponent<InputOutputCollider>().attachedGate = gate;
+            point.GetComponent<InputOutputCollider>().inputOutputNum = i;
+            point.GetComponent<InputOutputCollider>().isInput = false;
 
             outputpoints.Add(point);
         }

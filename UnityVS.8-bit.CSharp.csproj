@@ -72,6 +72,7 @@
     <Compile Include="Assets\EmptyGateComponent.cs" />
     <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\InputInputConnectorComponent.cs" />
+    <Compile Include="Assets\InputOutputCollider.cs" />
     <Compile Include="Assets\InputOutputConnectorComponent.cs" />
     <Compile Include="Assets\MoveCamera.cs" />
     <Compile Include="Assets\NAND.cs" />

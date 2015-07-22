@@ -292,7 +292,7 @@ public class Gate {
 
         if(parentGate.childOutputs[ownOutputs[ownOutputNum]].inputConnector != -1)
         {
-            throw new System.ArgumentException("each output can only be connected to one input!");
+            throw new System.ArgumentException("each output can only be connected to one output!");
         }
 
         int connectorNum = 0;
@@ -583,6 +583,9 @@ public class Gate {
             if (child.Name == "ininconnector")
             {
                 InputInputConnectorComponent component =  ((GameObject)Object.Instantiate(Resources.Load("ininconnector"))).GetComponent<InputInputConnectorComponent>();
+                if(this.component!=null)
+                    component.transform.SetParent(this.component.transform);
+                
                 InputInputConnector connector = (InputInputConnector)component.connector;
                 connector.parentGate = this;
 
@@ -595,6 +598,10 @@ public class Gate {
             if(child.Name == "inoutconnector")
             {
                 InputOutputConnectorComponent component = ((GameObject)Object.Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
+                if (this.component != null)
+                    component.transform.SetParent(this.component.transform);
+
+                
                 InputOutputConnector connector = (InputOutputConnector)component.connector;
                 connector.parentGate = this;
 
@@ -607,6 +614,9 @@ public class Gate {
             if(child.Name == "outoutconnector")
             {
                 OutputOutputConnectorComponent component = ((GameObject)Object.Instantiate(Resources.Load("outoutconnector"))).GetComponent<OutputOutputConnectorComponent>();
+                if (this.component != null)
+                    component.transform.SetParent(this.component.transform);
+
                 OutputOutputConnector connector = (OutputOutputConnector)component.connector;
                 connector.parentGate = this;
 
