@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 abstract public class Level
 {
@@ -18,7 +19,10 @@ abstract public class Level
         if(testing)
         {
             if (GameManager.instance.testingPanel != null)
+            {
                 GameManager.instance.testingPanel.SetActive(true);
+                GameManager.instance.testingPanel.GetComponent<TestingPanel>().fading = false;
+            }
             if(Test())
             {
                 testing = false;
@@ -35,8 +39,8 @@ abstract public class Level
         }
         else
         {
-            if (GameManager.instance.testingPanel!=null)
-            GameManager.instance.testingPanel.SetActive(false);
+            //if (GameManager.instance.testingPanel!=null)
+            //GameManager.instance.testingPanel.SetActive(false);
 
             frames = 0;
         }
@@ -51,13 +55,54 @@ abstract public class Level
 
     void Succeeded()
     {
-        UnityEngine.Debug.Log("success!");
-
+        Application.LoadLevel(2);
+        GameManager.instance.topComponent.Save(name);
     }
 
     void Failed()
     {
         UnityEngine.Debug.Log("failed");
+        GameManager.instance.testingPanel.GetComponent<TestingPanel>().fading = true;
+    }
+
+    protected int currentStep = 0;
+    int onframes = 0;
+
+    protected void testConfiguration(bool[] inputs, bool[] desiredOutputs)
+    {
+        for(int i=0; i<numInputs; i++)
+        {
+            GameManager.instance.topComponent.inputs[i] = inputs[i];
+        }
+
+        // allow 10 frames for things to settle
+        if(frames>10)
+        {
+            bool correct = true;
+            for(int i=0; i<numOutputs; i++)
+            {
+                if(GameManager.instance.topComponent.gate.childOutputs[i].IsOn != desiredOutputs[i])
+                {
+                    correct = false;
+                }
+            }
+
+            if(correct)
+            {
+                onframes++;
+
+                if(onframes == 10)
+                {
+                    currentStep++;
+                    onframes = 0;
+                    frames = 0;
+                }
+            }
+            else
+            {
+                onframes = 0;
+            }
+        }
     }
 }
 
@@ -69,79 +114,28 @@ public class AndLevel : Level
         numInputs = 2;
         numOutputs = 1;
 
-        currentstep = step.onon;
-
         name = "AND";
     }
 
-    enum step
-    {
-        onon,onoff,offon,offoff
-    }
-
-    step currentstep;
-
-    int onframes;
 
     protected override bool Test()
     {
-        switch(currentstep)
+        switch(currentStep)
         {
-            case step.onon:
-                GameManager.instance.topComponent.inputs[0] = true;
-                GameManager.instance.topComponent.inputs[1] = true;
-                if(frames>5 && GameManager.instance.topComponent.gate.childOutputs[0].IsOn == true){
-                    onframes ++;
-                }else{
-                    onframes = 0;
-                }
-                if(onframes == 10)
-                {
-                    currentstep = step.offon;
-                    frames = 0;
-                }
+            case 0:
+                testConfiguration(new bool[]{true,true},new bool[]{true});
                 break;
-            case step.offon:
-                GameManager.instance.topComponent.inputs[0] = false;
-                GameManager.instance.topComponent.inputs[1] = true;
-                if(frames>5 && GameManager.instance.topComponent.gate.childOutputs[0].IsOn == false){
-                    onframes ++;
-                }else{
-                    onframes = 0;
-                }
-                if(onframes == 10)
-                {
-                    currentstep = step.onoff;
-                    frames = 0;
-                }
+            case 1:
+                testConfiguration(new bool[]{true,false},new bool[]{false});
                 break;
-            case step.onoff:
-                GameManager.instance.topComponent.inputs[0] = true;
-                GameManager.instance.topComponent.inputs[1] = false;
-                if(frames>5 && GameManager.instance.topComponent.gate.childOutputs[0].IsOn == false){
-                    onframes ++;
-                }else{
-                    onframes = 0;
-                }
-                if(onframes == 10)
-                {
-                    currentstep = step.offoff;
-                    frames = 0;
-                }
+            case 2:
+                testConfiguration(new bool[]{false,true},new bool[]{false});
                 break;
-            case step.offoff:
-                GameManager.instance.topComponent.inputs[0] = false;
-                GameManager.instance.topComponent.inputs[1] = false;
-                if(frames>5 && GameManager.instance.topComponent.gate.childOutputs[0].IsOn == false){
-                    onframes ++;
-                }else{
-                    onframes = 0;
-                }
-                if(onframes == 10)
-                {
-                    return true;
-                }
+            case 3:
+                testConfiguration(new bool[] { false, false }, new bool[] { false });
                 break;
+            case 4:
+                return true;
         }
 
         return false;
