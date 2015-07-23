@@ -15,8 +15,10 @@ public abstract class ConnectorComponent : MonoBehaviour {
     void Start()
     {
         Vector3[] linepoints = new Vector3[30];
-        line = new VectorLine("line", linepoints, null, 2.0f);
+        line = new VectorLine("line",linepoints, null, 2.0f);
         line.color = Color.black;
+
+        connector.component = this;
     }
 
     void LateUpdate()
@@ -55,5 +57,10 @@ public abstract class ConnectorComponent : MonoBehaviour {
         {
             line.active = false;
         }
+    }
+
+    void OnDestroy()
+    {
+        line.active = false;
     }
 }

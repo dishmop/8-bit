@@ -7,10 +7,14 @@ using System.Xml;
 public abstract class Connector
 {
     public Gate parentGate;
+    public int connectorNum = -1;
+    public ConnectorComponent component;
 
     abstract public bool IsOn { get; }
 
     abstract public void Save(XmlWriter writer, int indexx);
+
+    abstract public void Remove();
 }
 
 public class InputOutputConnector : Connector {
@@ -30,6 +34,20 @@ public class InputOutputConnector : Connector {
         writer.WriteAttributeString("input", input.ToString());
         writer.WriteAttributeString("output", output.ToString());
         writer.WriteEndElement();
+    }
+
+    //removes the connector
+    public override void Remove()
+    {
+        Object.Destroy(component.gameObject);
+
+        if (parentGate.childInputs.ContainsKey(input))
+            parentGate.childInputs[input].connector = -1;
+
+        if(parentGate.childOutputs.ContainsKey(output) && parentGate.childOutputs[output].connectors.Contains(connectorNum))
+            parentGate.childOutputs[output].connectors.Remove(connectorNum);
+
+        parentGate.connectors.Remove(connectorNum);
     }
 }
 
@@ -54,6 +72,20 @@ public class InputInputConnector : Connector
         writer.WriteAttributeString("childInput", childInput.ToString());
         writer.WriteEndElement();
     }
+
+    //removes the connector
+    public override void Remove()
+    {
+        Object.Destroy(component.gameObject);
+
+        if (parentGate.childInputs.ContainsKey(input))
+        parentGate.childInputs[input].connector = -1;
+
+        if (parentGate.parentGate.childInputs.ContainsKey(childInput))
+        parentGate.parentGate.childInputs[childInput].connector = -1;
+
+        parentGate.connectors.Remove(connectorNum);
+    }
 }
 
 public class OutputOutputConnector : Connector
@@ -75,6 +107,22 @@ public class OutputOutputConnector : Connector
         writer.WriteAttributeString("output", output.ToString());
         writer.WriteEndElement();
     }
+
+    //removes the connector
+    public override void Remove()
+    {
+        Object.Destroy(component.gameObject);
+
+        if(parentGate.parentGate.childOutputs.ContainsKey(childOuput))
+        parentGate.parentGate.childOutputs[childOuput].inputConnector = -1;
+
+        if (parentGate.childOutputs.ContainsKey(output))
+        if (parentGate.childOutputs[output].connectors.Contains(connectorNum))
+            parentGate.childOutputs[output].connectors.Remove(connectorNum);
+
+        parentGate.connectors.Remove(connectorNum);
+    }
+
 }
 
 public class Input
@@ -123,13 +171,22 @@ public class Input
         connector = System.Int32.Parse(node.Attributes["connector"].Value);
         inputNum = System.Int32.Parse(node.Attributes["inputNum"].Value);
     }
+
+    public void Remove()
+    {
+        // remove connector
+        if(connector!=-1)
+            parentGate.connectors[connector].Remove();
+
+        parentGate.childInputs.Remove(parentGate.gates[attachedGate].ownInputs[inputNum]);
+    }
 }
 
 public class Output {
     public Gate parentGate;
 
     public int attachedGate;
-    public int connector;
+    public List<int> connectors;
 
     public int outputNum;
 
@@ -139,7 +196,14 @@ public class Output {
 
     public void Update()
     {
-        isOn = IsOnNew;
+        if (GameManager.instance.testing)
+        {
+            isOn = IsOnNew;
+        }
+        else
+        {
+            isOn = false;
+        }
     }
 
     public bool IsOn
@@ -155,7 +219,7 @@ public class Output {
         writer.WriteAttributeString("index", index.ToString());
 
         writer.WriteAttributeString("attachedGate", attachedGate.ToString());
-        writer.WriteAttributeString("connector", connector.ToString());
+        //writer.WriteAttributeString("connector", connector.ToString());
         writer.WriteAttributeString("outputNum", outputNum.ToString());
         writer.WriteAttributeString("inputConnector", inputConnector.ToString());
 
@@ -165,9 +229,25 @@ public class Output {
     public void Load(XmlNode node, Dictionary<int, int> oldToNewGates)
     {
         attachedGate = oldToNewGates[System.Int32.Parse(node.Attributes["attachedGate"].Value)];
-        connector = System.Int32.Parse(node.Attributes["connector"].Value);
+        connectors = new List<int>();//System.Int32.Parse(node.Attributes["connector"].Value);
         outputNum = System.Int32.Parse(node.Attributes["outputNum"].Value);
         inputConnector = System.Int32.Parse(node.Attributes["inputConnector"].Value);
+    }
+
+    public void Remove()
+    {
+        // remove connector
+        foreach (int connector in connectors.ToArray())
+        {
+            parentGate.connectors[connector].Remove();
+        }
+
+        if(inputConnector!=-1)
+        {
+            parentGate.gates[attachedGate].connectors[inputConnector].Remove();
+        }
+
+        parentGate.childOutputs.Remove(parentGate.gates[attachedGate].ownOutputs[outputNum]);
     }
 }
 
@@ -189,6 +269,8 @@ public class Gate {
 
     public Gate parentGate;
 
+    public int gateNum;
+
     public int AddGate(Gate gate) {
 
         if (component != null && gate.component != null)
@@ -202,6 +284,7 @@ public class Gate {
             gateNum++;
         }
         gates.Add(gateNum, gate);
+        gate.gateNum = gateNum;
 
         gate.depth = depth + 1;
 
@@ -232,7 +315,7 @@ public class Gate {
             newOutput.attachedGate = gateNum;
             newOutput.parentGate = this;
 
-            newOutput.connector = -1;
+            newOutput.connectors = new List<int>();
 
             gate.ownOutputs[key] = 0;
             while (childOutputs.ContainsKey(gate.ownOutputs[key]))
@@ -271,8 +354,9 @@ public class Gate {
             connectorNum++;
         }
         connectors.Add(connectorNum, connector);
+        connector.connectorNum = connectorNum;
 
-        childOutputs[outputFrom.ownOutputs[outputNum]].connector = connectorNum;
+        childOutputs[outputFrom.ownOutputs[outputNum]].connectors.Add(connectorNum);
         childInputs[inputTo.ownInputs[inputNum]].connector = connectorNum;
 
         connector.parentGate = this;
@@ -301,8 +385,9 @@ public class Gate {
             connectorNum++;
         }
         connectors.Add(connectorNum, connector);
+        connector.connectorNum = connectorNum;
 
-        childOutputs[outputFrom.ownOutputs[outputNum]].connector = connectorNum;
+        childOutputs[outputFrom.ownOutputs[outputNum]].connectors.Add(connectorNum);
         parentGate.childOutputs[ownOutputs[ownOutputNum]].inputConnector = connectorNum;
 
         connector.parentGate = this;
@@ -329,6 +414,7 @@ public class Gate {
             connectorNum++;
         }
         connectors.Add(connectorNum, connector);
+        connector.connectorNum = connectorNum;
 
 
         childInputs[inputTo.ownInputs[inputNum]].connector = connectorNum;
@@ -544,6 +630,7 @@ public class Gate {
                     gateNum++;
                 }
                 gates.Add(gateNum, gate);
+                gate.gateNum = gateNum;
 
                 gate.depth = depth + 1;
                 gate.parentGate = this;
@@ -611,6 +698,7 @@ public class Gate {
                 connector.parentGate = this;
 
                 connectors.Add(System.Int32.Parse(child.Attributes["index"].Value), connector);
+                connector.connectorNum = System.Int32.Parse(child.Attributes["index"].Value);
 
                 connector.input = System.Int32.Parse(child.Attributes["input"].Value);
                 connector.childInput = System.Int32.Parse(child.Attributes["childInput"].Value);
@@ -627,6 +715,8 @@ public class Gate {
                 connector.parentGate = this;
 
                 connectors.Add(System.Int32.Parse(child.Attributes["index"].Value), connector);
+                connector.connectorNum = System.Int32.Parse(child.Attributes["index"].Value);
+
 
                 connector.input = System.Int32.Parse(child.Attributes["input"].Value);
                 connector.output = System.Int32.Parse(child.Attributes["output"].Value);
@@ -642,6 +732,8 @@ public class Gate {
                 connector.parentGate = this;
 
                 connectors.Add(System.Int32.Parse(child.Attributes["index"].Value), connector);
+                connector.connectorNum = System.Int32.Parse(child.Attributes["index"].Value);
+
 
                 connector.childOuput = System.Int32.Parse(child.Attributes["childOutput"].Value);
                 connector.output = System.Int32.Parse(child.Attributes["output"].Value);
@@ -686,6 +778,30 @@ public class Gate {
         int index = 0;
         while (ownOutputs.ContainsKey(index)) index++;
         ownOutputs.Add(index, num);
+    }
+
+    public void Remove()
+    {
+        //recursively remove children
+        List<int> keylist = new List<int>(gates.Keys);
+        foreach (int key in keylist)
+        {
+            gates[key].Remove();
+        }
+
+        // remove inputs and outputs (which in turn remove connectors)
+        foreach (KeyValuePair<int,int> input in ownInputs)
+        {
+            parentGate.childInputs[input.Value].Remove();
+        }
+        foreach (KeyValuePair<int, int> output in ownOutputs)
+        {
+            parentGate.childOutputs[output.Value].Remove();
+        }
+
+        Object.Destroy(component.gameObject);
+
+        parentGate.gates.Remove(gateNum);
     }
 }
 

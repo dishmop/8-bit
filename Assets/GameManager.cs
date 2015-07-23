@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 using Vectrosity;
 
@@ -19,9 +20,32 @@ public class GameManager : MonoBehaviour {
     bool moving;
     GateComponent movingcomp;
 
-    public static string[] gatenames = { "AND", "NAND", "NOT", "OR", "ignore", "S'R'" };
+    public static string[] gatenames = { "NAND","NOT","AND","OR","NOR","XOR", "XNOR","AND3","NAND3","OR3" };
 
     public TopComponent topComponent;
+
+    public GameObject testingPanel;
+
+    public int numInputs
+    {
+        get
+        {
+            return Level.instance.numInputs;
+        }
+    }
+    public int numOutputs
+    {
+        get
+        {
+            return Level.instance.numOutputs;
+        }
+    }
+
+    public bool testing;
+
+    Vector3 positionRelative;
+
+    Level currentlevel;
 
     void Start ()
     {
@@ -30,9 +54,13 @@ public class GameManager : MonoBehaviour {
         Vector2[] linepoints = new Vector2[2];
         line = new VectorLine("line", linepoints, null, 2.0f);
         line.color = Color.black;
+
+        currentlevel = new AndLevel();
     }
 	
 	void Update () {
+        Level.instance.Update();
+
 	    if(UnityEngine.Input.GetKeyDown(KeyCode.Mouse0))
         {
             if (current != null)
@@ -52,20 +80,26 @@ public class GameManager : MonoBehaviour {
                 {
                     if(first.isInput && !current.isInput)
                     {
-                        if (first.attachedGate.parentGate.childInputs[first.attachedGate.ownInputs[first.inputOutputNum]].connector == -1)
+                        if (first.attachedGate.parentGate.childInputs[first.attachedGate.ownInputs[first.inputOutputNum]].connector != -1)
                         {
-                            InputOutputConnectorComponent io1 = ((GameObject)Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
-                            first.attachedGate.parentGate.Connect(current.attachedGate, current.inputOutputNum, first.attachedGate, first.inputOutputNum, (InputOutputConnector)io1.connector);
+                           first.attachedGate.parentGate.connectors[first.attachedGate.parentGate.childInputs[first.attachedGate.ownInputs[first.inputOutputNum]].connector].Remove();
                         }
+
+                        InputOutputConnectorComponent io1 = ((GameObject)Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
+                        first.attachedGate.parentGate.Connect(current.attachedGate, current.inputOutputNum, first.attachedGate, first.inputOutputNum, (InputOutputConnector)io1.connector);
+     
                     }
 
                     if( !first.isInput && current.isInput)
                     {
-                        if (current.attachedGate.parentGate.childInputs[current.attachedGate.ownInputs[current.inputOutputNum]].connector == -1)
+                        if (current.attachedGate.parentGate.childInputs[current.attachedGate.ownInputs[current.inputOutputNum]].connector != -1)
                         {
-                            InputOutputConnectorComponent io1 = ((GameObject)Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
-                            first.attachedGate.parentGate.Connect(first.attachedGate, first.inputOutputNum, current.attachedGate, current.inputOutputNum, (InputOutputConnector)io1.connector);
+                            current.attachedGate.parentGate.connectors[current.attachedGate.parentGate.childInputs[current.attachedGate.ownInputs[current.inputOutputNum]].connector].Remove();
                         }
+
+                        InputOutputConnectorComponent io1 = ((GameObject)Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
+                        first.attachedGate.parentGate.Connect(first.attachedGate, first.inputOutputNum, current.attachedGate, current.inputOutputNum, (InputOutputConnector)io1.connector);
+
                     }
                 }
 
@@ -82,21 +116,26 @@ public class GameManager : MonoBehaviour {
                     // attach input to input
                     if(first.isInput && current.isInput)
                     {
-                        if (first.attachedGate.childInputs[current.attachedGate.ownInputs[current.inputOutputNum]].connector == -1)
+                        if (first.attachedGate.childInputs[current.attachedGate.ownInputs[current.inputOutputNum]].connector != -1)
                         {
-                            InputInputConnectorComponent ii1 = ((GameObject)Instantiate(Resources.Load("ininconnector"))).GetComponent<InputInputConnectorComponent>();
-                            first.attachedGate.ConnectInput(first.inputOutputNum, current.attachedGate, current.inputOutputNum, (InputInputConnector)ii1.connector);
+                            first.attachedGate.connectors[first.attachedGate.childInputs[current.attachedGate.ownInputs[current.inputOutputNum]].connector].Remove();
                         }
+
+                        InputInputConnectorComponent ii1 = ((GameObject)Instantiate(Resources.Load("ininconnector"))).GetComponent<InputInputConnectorComponent>();
+                        first.attachedGate.ConnectInput(first.inputOutputNum, current.attachedGate, current.inputOutputNum, (InputInputConnector)ii1.connector);
                     }
 
                     // attach output to output
                     if(!first.isInput && !current.isInput)
                     {
-                        if (first.attachedGate.parentGate.childOutputs[first.attachedGate.ownOutputs[first.inputOutputNum]].inputConnector == -1)
+                        if (first.attachedGate.parentGate.childOutputs[first.attachedGate.ownOutputs[first.inputOutputNum]].inputConnector != -1)
                         {
-                            OutputOutputConnectorComponent oo1 = ((GameObject)Instantiate(Resources.Load("outoutconnector"))).GetComponent<OutputOutputConnectorComponent>();
-                            first.attachedGate.ConnectOutput(current.attachedGate, current.inputOutputNum, first.inputOutputNum, (OutputOutputConnector)oo1.connector);
+                            first.attachedGate.connectors[first.attachedGate.parentGate.childOutputs[first.attachedGate.ownOutputs[first.inputOutputNum]].inputConnector].Remove();
                         }
+
+
+                        OutputOutputConnectorComponent oo1 = ((GameObject)Instantiate(Resources.Load("outoutconnector"))).GetComponent<OutputOutputConnectorComponent>();
+                        first.attachedGate.ConnectOutput(current.attachedGate, current.inputOutputNum, first.inputOutputNum, (OutputOutputConnector)oo1.connector);
                     }
                 }
             }
@@ -109,16 +148,25 @@ public class GameManager : MonoBehaviour {
             if(currentComponent!=null)
             {
                 movingcomp = currentComponent;
+                positionRelative = currentComponent.transform.position - Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
             }
         }
         if(UnityEngine.Input.GetKeyUp(KeyCode.Mouse0))
         {
+            if(movingcomp!=null)
+            {
+                if(EventSystem.current.IsPointerOverGameObject())
+                {
+                    movingcomp.gate.Remove();
+                }
+            }
+
             movingcomp = null;
         }
 
         if(movingcomp!=null)
         {
-            movingcomp.transform.position = movingcomp.transform.position + 10*new Vector3(UnityEngine.Input.GetAxis("Mouse X"), UnityEngine.Input.GetAxis("Mouse Y"),0);
+            movingcomp.transform.position = positionRelative + Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
         }
 
         if(first!=null)
@@ -144,4 +192,15 @@ public class GameManager : MonoBehaviour {
         }
         hitcollider = hit.collider;
 	}
+
+    public void LoadLevel(int num)
+    {
+        testing = true;
+        Application.LoadLevel(num);
+    }
+
+    public void Test()
+    {
+        Level.instance.BeginTest();
+    }
 }

@@ -11,7 +11,7 @@ public class OutputOutputConnectorComponent : ConnectorComponent
 
     void Update()
     {
-        Output childoutput = connector.parentGate.parentGate.childOutputs[((OutputOutputConnector)connector).childOuput];
+        Output childoutput = connector.parentGate.parentGate.childOutputs[connector.parentGate.ownOutputs[((OutputOutputConnector)connector).childOuput]];
         Output output = connector.parentGate.childOutputs[((OutputOutputConnector)connector).output];
 
         from = connector.parentGate.gates[output.attachedGate].component.transform.position;

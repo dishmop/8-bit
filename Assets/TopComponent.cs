@@ -7,11 +7,16 @@ public class TopComponent : GateComponent
 
     void Start()
     {
+        numInputs = GameManager.instance.numInputs;
+        numOutputs = GameManager.instance.numOutputs;
+
         empty = ((GameObject)Instantiate(Resources.Load("empty"))).GetComponent<EmptyGateComponent>();
         empty.numInputs = numInputs;
         empty.numOutputs = numOutputs;
-        empty.extrawidth = 200;
+        empty.extrawidth = 300;
         empty.setup();
+
+        empty.visible = false;
 
         gate = new Gate();
         gate.AddGate(empty.gate);

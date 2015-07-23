@@ -11,7 +11,7 @@ public class InputInputConnectorComponent : ConnectorComponent
     void Update()
     {
         Input input = connector.parentGate.childInputs[((InputInputConnector)connector).input];
-        Input childinput = connector.parentGate.parentGate.childInputs[((InputInputConnector)connector).childInput];
+        Input childinput = connector.parentGate.parentGate.childInputs[connector.parentGate.ownInputs[((InputInputConnector)connector).childInput]];
 
 
         from = connector.parentGate.component.transform.position;

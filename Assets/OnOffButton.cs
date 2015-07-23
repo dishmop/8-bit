@@ -5,7 +5,7 @@ using System.Collections;
 public class OnOffButton : MonoBehaviour {
     public bool isOn;
 
-    bool enabled = false;
+    new bool enabled = false;
 
     public int inputNum = -1;
     public int outputNum = -1;
@@ -32,6 +32,8 @@ public class OnOffButton : MonoBehaviour {
             if(GameManager.instance.topComponent.inputs.Count>inputNum)
             {
                 enabled = true;
+
+                isOn = GameManager.instance.topComponent.inputs[inputNum];
             }
         }
 

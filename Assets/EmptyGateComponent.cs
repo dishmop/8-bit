@@ -78,16 +78,30 @@ public class EmptyGateComponent : GateComponent {
     {
         for (int i = 0; i < numInputs; i++)
         {
-            inputoffsets[i] = new Vector3(-extrawidth-50*(4-gate.depth), -60*i + 30*(numInputs-1));
+            inputoffsets[i] = new Vector3(-extrawidth-50, -60*i + 30*(numInputs-1));
             inputpoints[i].transform.position = transform.position + inputoffsets[i];
         }
 
         for (int i = 0; i < numOutputs; i++)
         {
-            outputoffsets[i] = new Vector3(extrawidth + 50 * (4 - gate.depth), -60 * i + 30 * (numOutputs-1));
+            outputoffsets[i] = new Vector3(extrawidth + 50, -60 * i + 30 * (numOutputs-1));
             outputpoints[i].transform.position = transform.position + outputoffsets[i];
         }
 
         base.Update();
+    }
+
+    void OnDestroy()
+    {
+        for (int i = 0; i < numInputs; i++)
+        {
+            Object.Destroy(inputpoints[i]);
+        }
+
+        for (int i = 0; i < numOutputs; i++)
+        {
+            Object.Destroy(outputpoints[i]);
+        }
+
     }
 }
