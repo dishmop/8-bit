@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: dc2d51eed780c024190a4e2435f6148c
-timeCreated: 1437577283
+guid: 744997e26b26c1241b351386c2491a38
+timeCreated: 1437666332
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -14,6 +14,7 @@ TextureImporter:
     21300014: gates_7
     21300016: gates_8
     21300018: gates_9
+    21300020: gates_10
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -153,6 +154,16 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 128
+        y: 128
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gates_10
+      rect:
+        serializedVersion: 2
+        x: 256
         y: 128
         width: 128
         height: 128

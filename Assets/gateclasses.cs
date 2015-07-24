@@ -473,9 +473,9 @@ public class Gate {
     {
         int spritenum = -1;
         // test if the name is recognised
-        for(int i=0; i<GameManager.gatenames.Length; i++)
+        for(int i=0; i<GameManager.gatelevels.Length; i++)
         {
-            if(name == GameManager.gatenames[i])
+            if(name == GameManager.gatelevels[i].name)
             {
                 spritenum = i;
             }
@@ -837,7 +837,10 @@ public abstract class GateComponent : MonoBehaviour
                 GetComponent<Collider2D>().enabled = true;
 
                 if (GameManager.instance.hitcollider == GetComponent<Collider2D>())
+                {
                     GameManager.instance.currentComponent = this;
+                    GameManager.instance.current = null;
+                }
             }
         }
         else

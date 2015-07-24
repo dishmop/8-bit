@@ -3,27 +3,26 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour {
-    public Text inputsText;
-    public Text outputsText;
-
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        inputsText.text = "Inputs: " + GameManager.instance.numInputs;
-        outputsText.text = "Outputs: " + GameManager.instance.numOutputs;
-	}
-
-    public void AddInputs(int num)
+	public void Quit()
     {
-        //GameManager.instance.numInputs += num;
+        Application.Quit();
     }
-    public void AddOutputs(int num)
+
+    public void MouseOverFreePlay()
     {
-       // GameManager.instance.numOutputs += num;
+        ToolTip.instance.visible = true;
+        ToolTip.instance.currentText = "Connect up the components you've made so far";
+
+    }
+
+    public void FreePlay()
+    {
+        Level.instance = new FreePlay();
+        GameManager.instance.LoadLevel(1);
+    }
+
+    public void MouseExitFreePlay()
+    {
+        ToolTip.instance.visible = false;
     }
 }

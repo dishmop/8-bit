@@ -20,7 +20,8 @@ public class GameManager : MonoBehaviour {
     bool moving;
     GateComponent movingcomp;
 
-    public static string[] gatenames = { "NAND","NOT","AND","OR","NOR","XOR", "XNOR","AND3","NAND3","OR3" };
+    //public static string[] gatenames = { "NAND","NOT","AND","OR","NOR","XOR", "XNOR","AND3","NAND3","OR3" };
+    public static Level[] gatelevels = { new NandLevel(), new NotLevel(), new AndLevel(), new OrLevel(), new NorLevel(), new XorLevel(), new XnorLevel(), new And3Level(), new Or3Level(), new Nand3Level(), new SRLevel() };
 
     public TopComponent topComponent;
 
@@ -45,27 +46,52 @@ public class GameManager : MonoBehaviour {
 
     Vector3 positionRelative;
 
-    Level currentlevel;
-
     void Start ()
     {
         instance = this;
 
-        Vector2[] linepoints = new Vector2[2];
+        Vector3[] linepoints = new Vector3[2];
         line = new VectorLine("line", linepoints, null, 2.0f);
         line.color = Color.black;
 
-        currentlevel = new AndLevel();
+        if(!System.IO.File.Exists(Application.persistentDataPath + "/NAND.xml"))
+        {
+            // lolololol
+            string[] lines = {
+"<gate index=\"0\" type=\"Gate\" x=\"0\" y=\"0\">",
+	"<input index=\"0\" attachedGate=\"0\" connector=\"-1\" inputNum=\"0\" />",
+	"<input index=\"1\" attachedGate=\"0\" connector=\"-1\" inputNum=\"1\" />",
+	"<output index=\"0\" attachedGate=\"0\" connector=\"-1\" outputNum=\"0\" inputConnector=\"2\" />",
+	"<gate index=\"0\" type=\"Gate\" x=\"0\" y=\"0\" spritenum=\"0\">",
+		"<ownInput index=\"0\" num=\"0\" />",
+		"<ownInput index=\"1\" num=\"1\" />",
+		"<ownOutput index=\"0\" num=\"0\" />",
+		"<input index=\"0\" attachedGate=\"0\" connector=\"0\" inputNum=\"0\" />",
+		"<input index=\"1\" attachedGate=\"0\" connector=\"1\" inputNum=\"1\" />",
+		"<output index=\"0\" attachedGate=\"0\" connector=\"2\" outputNum=\"0\" inputConnector=\"-1\" />",
+		"<ininconnector index=\"0\" input=\"0\" childInput=\"0\" />",
+		"<ininconnector index=\"1\" input=\"1\" childInput=\"1\" />",
+		"<outoutconnector index=\"2\" childOutput=\"0\" output=\"0\" />",
+		"<gate index=\"0\" type=\"NandGate\" x=\"0\" y=\"30\">",
+			"<ownInput index=\"0\" num=\"0\" />",
+			"<ownInput index=\"1\" num=\"1\" />",
+			"<ownOutput index=\"0\" num=\"0\" />",
+		"</gate>",
+	"</gate>",
+"</gate>"};
+            System.IO.File.WriteAllLines(Application.persistentDataPath + "/NAND.xml", lines);
+        }
     }
 	
 	void Update () {
+        if(Level.instance!=null)
         Level.instance.Update();
 
 	    if(UnityEngine.Input.GetKeyDown(KeyCode.Mouse0))
         {
             if (current != null)
             {
-                line.points2[0] = UnityEngine.Input.mousePosition;
+                line.points3[0] = current.transform.position;
 
                 first = current;
             }
@@ -173,7 +199,7 @@ public class GameManager : MonoBehaviour {
         {
             line.active = true;
 
-            line.points2[1] = UnityEngine.Input.mousePosition;
+            line.points3[1] = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
 
             line.Draw();
         }

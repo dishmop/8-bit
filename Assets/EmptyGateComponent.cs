@@ -11,6 +11,8 @@ public class EmptyGateComponent : GateComponent {
 
     public int extrawidth = 0;
 
+    public GameObject child;
+
 
     void Awake()
     {
@@ -89,6 +91,15 @@ public class EmptyGateComponent : GateComponent {
         }
 
         base.Update();
+
+        if(GameManager.instance.currentComponent == this)
+        {
+            child.SetActive(true);
+        }
+        else
+        {
+            child.SetActive(false);
+        }
     }
 
     void OnDestroy()

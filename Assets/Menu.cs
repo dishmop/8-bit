@@ -6,15 +6,14 @@ public class Menu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	    for(int i=0; i<GameManager.gatenames.Length; i++)
+	    for(int i=0; i<GameManager.gatelevels.Length; i++)
         {
-            if (System.IO.File.Exists(Application.persistentDataPath + "/" + GameManager.gatenames[i] + ".xml"))
+            if (GameManager.gatelevels[i].Done())
             {
                 GameObject item = (GameObject)Instantiate(itemPrefab);
                 item.transform.SetParent(transform);
 
-                item.GetComponent<menuItem>().itemnum = i;
-                item.GetComponent<menuItem>().itemname = GameManager.gatenames[i];
+                item.GetComponent<menuItem>().itemlevel = GameManager.gatelevels[i];
 
                 item.GetComponent<menuItem>().Setup();
             }
