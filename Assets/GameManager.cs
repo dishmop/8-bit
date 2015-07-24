@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour {
     bool moving;
     GateComponent movingcomp;
 
-    public static Level[] gatelevels = { new NandLevel(), new NotLevel(), new AndLevel(), new OrLevel(), new NorLevel(), new XorLevel(), new XnorLevel(), new And3Level(), new Or3Level(), new Nand3Level(), new SRLevel(), new SRGatedLevel() };
+    public static Level[] gatelevels = { new NandLevel(), new NotLevel(), new AndLevel(), new OrLevel(), new NorLevel(), new XorLevel(), new XnorLevel(), new And3Level(), new Or3Level(), new Nand3Level(), new SRLevel(), new SRGatedLevel(), new DLevel() };
 
     public TopComponent topComponent;
 
