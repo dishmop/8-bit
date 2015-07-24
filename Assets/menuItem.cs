@@ -31,7 +31,7 @@ public class menuItem : MonoBehaviour {
 
     public void OnClick()
     {
-        if (Application.loadedLevel == 1)
+        if (Application.loadedLevel != 0)
         {
             // in game, create the object
             GameManager.instance.topComponent.LoadComponent(itemlevel.name);
@@ -43,7 +43,15 @@ public class menuItem : MonoBehaviour {
             {
                 ToolTip.instance.Click2();
                 Level.instance = itemlevel;
-                GameManager.instance.LoadLevel(1);
+
+                if (itemlevel.name == "NOT")
+                {
+                    GameManager.instance.LoadLevel(2);
+                }
+                else
+                {
+                    GameManager.instance.LoadLevel(1);
+                }
             }
         }
     }

@@ -34,8 +34,8 @@ public abstract class ConnectorComponent : MonoBehaviour {
             offset = (to.x - from.x) / 2;
         }
 
-        Vector3 control1 = from + new Vector3(offset, 5);
-        Vector3 control2 = to + new Vector3(-offset, 5);
+        Vector3 control1 = from + new Vector3(offset, 0);
+        Vector3 control2 = to + new Vector3(-offset, 0);
 
         line.MakeCurve(from, control1, to, control2);
 

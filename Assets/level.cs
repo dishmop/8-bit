@@ -579,6 +579,108 @@ public class SRLevel : Level
         return false;
     }
 }
+
+public class SRGatedLevel : Level
+{
+    public SRGatedLevel()
+    {
+        numInputs = 3;
+        numOutputs = 2;
+
+        description = "Gated 'SR' latch: if E is on, behaves like SR latch, otherwise holds its state.";
+        name = "SRGated";
+        spritenum = 11;
+
+        prerequisites = new Level[] { new SRLevel(), new AndLevel() };
+
+        hint = "Start with an SR latch and add gates to check whether E is on.";
+    }
+
+
+    protected override bool Test()
+    {
+        switch (currentStep)
+        {
+            case 0:
+                testConfiguration(new bool[] { true, true, false }, new bool[] { false, true });
+                break;
+            case 1:
+                testConfiguration(new bool[] { true, false, false }, new bool[] { false, true });
+                break;
+            case 2:
+                testConfiguration(new bool[] { false, false, true }, new bool[] { false, true });
+                break;
+            case 3:
+                testConfiguration(new bool[] { false, true, true }, new bool[] { true, false });
+                break;
+            case 4:
+                testConfiguration(new bool[] { false, true, false }, new bool[] { true, false });
+                break;
+            case 5:
+                testConfiguration(new bool[] { false, false, false }, new bool[] { true, false });
+                break;
+            case 6:
+                testConfiguration(new bool[] { true, false, false }, new bool[] { true, false });
+                break;
+            case 7:
+                return true;
+        }
+
+        return false;
+    }
+}
+
+public class DLevel : Level
+{
+    public DLevel()
+    {
+        numInputs = 2;
+        numOutputs = 2;
+
+        description = "'D' flip-flop. If E is on, first output is same as D, second is opposite. If E is off, the state holds.";
+        name = "D";
+        spritenum = 12;
+
+        prerequisites = new Level[] { new SRGatedLevel() };
+
+        hint = "Use a gated SR latch and control both S and R from one input.";
+    }
+
+
+    protected override bool Test()
+    {
+        switch (currentStep)
+        {
+            case 0:
+                testConfiguration(new bool[] { true, true }, new bool[] { true, false });
+                break;
+            case 1:
+                testConfiguration(new bool[] { true, false }, new bool[] { true, false });
+                break;
+            case 2:
+                testConfiguration(new bool[] { false, false }, new bool[] { true, false });
+                break;
+            case 3:
+                testConfiguration(new bool[] { false, true }, new bool[] { false, true });
+                break;
+            case 4:
+                testConfiguration(new bool[] { true, true }, new bool[] { true, false });
+                break;
+            case 5:
+                testConfiguration(new bool[] { false, true }, new bool[] { false, true });
+                break;
+            case 6:
+                testConfiguration(new bool[] { false, false }, new bool[] { false, true });
+                break;
+            case 7:
+                return true;
+        }
+
+        return false;
+    }
+}
+
+
 public class NandLevel : Level
 {
     public NandLevel()
