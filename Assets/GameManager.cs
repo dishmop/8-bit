@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour {
 
         Vector3[] linepoints = new Vector3[2];
         line = new VectorLine("line", linepoints, null, 2.0f);
-        line.color = Color.black;
+        line.color = Color.green;
 
         if(!System.IO.File.Exists(Application.persistentDataPath + "/NAND.xml"))
         {
@@ -94,6 +94,8 @@ public class GameManager : MonoBehaviour {
                 line.points3[0] = current.transform.position;
 
                 first = current;
+
+                ToolTip.instance.Click1();
             }
         }
 
@@ -101,6 +103,8 @@ public class GameManager : MonoBehaviour {
         {
             if(current!=null && first!=null)
             {
+                ToolTip.instance.Click2();
+
                 // connect two components same level
                 if(first.attachedGate.parentGate == current.attachedGate.parentGate)
                 {
@@ -217,6 +221,8 @@ public class GameManager : MonoBehaviour {
             currentComponent = null;
         }
         hitcollider = hit.collider;
+
+        VectorLine.canvas.sortingOrder = -1;
 	}
 
     public void LoadLevel(int num)

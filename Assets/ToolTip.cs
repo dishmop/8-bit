@@ -15,6 +15,9 @@ public class ToolTip : MonoBehaviour {
     public AudioClip click1;
     public AudioClip click2;
 
+    public AudioClip success;
+    public AudioClip failure;
+
     AudioSource audiosource;
 
 	void Start () {
@@ -22,10 +25,12 @@ public class ToolTip : MonoBehaviour {
         textfield = GetComponentInChildren<Text>();
         background = GetComponent<Image>();
         audiosource = GetComponent<AudioSource>();
+
+        DontDestroyOnLoad(this);
 	}
 	
 	void Update () {
-        transform.position = UnityEngine.Input.mousePosition+new Vector3(-60,-5,0);
+        transform.position = UnityEngine.Input.mousePosition+new Vector3(-60,-15,0);
 
 	    if(visible)
         {
@@ -42,11 +47,25 @@ public class ToolTip : MonoBehaviour {
 
     public void Click1()
     {
-        audiosource.PlayOneShot(click1);
+        audiosource.clip = click1;
+        audiosource.Play();
     }
 
     public void Click2()
     {
-        audiosource.PlayOneShot(click2);
+        audiosource.clip = click2;
+        audiosource.Play();
+    }
+
+    public void Success()
+    {
+        audiosource.clip = success;
+        audiosource.Play();
+    }
+
+    public void Failure()
+    {
+        audiosource.clip = failure;
+        audiosource.Play();
     }
 }

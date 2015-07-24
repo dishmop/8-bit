@@ -16,7 +16,7 @@ public abstract class ConnectorComponent : MonoBehaviour {
     {
         Vector3[] linepoints = new Vector3[30];
         line = new VectorLine("line",linepoints, null, 2.0f);
-        line.color = Color.black;
+        line.color = Color.green;
 
         connector.component = this;
     }
@@ -41,11 +41,11 @@ public abstract class ConnectorComponent : MonoBehaviour {
 
         if(connector.IsOn)
         {
-            line.color = Color.green;
+            line.color = Color.white;
         }
         else
         {
-            line.color = Color.black;
+            line.color = Color.green;
         }
 
         if (visible)

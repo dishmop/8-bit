@@ -83,12 +83,14 @@ abstract public class Level
         GameManager.instance.topComponent.Save(name);
         GameManager.instance.testingPanel.GetComponent<TestingPanel>().fading = true;
         GameManager.instance.testingPanel.GetComponent<TestingPanel>().success = true;
+        ToolTip.instance.Success();
     }
 
     void Failed()
     {
         UnityEngine.Debug.Log("failed");
         GameManager.instance.testingPanel.GetComponent<TestingPanel>().fading = true;
+        ToolTip.instance.Failure();
     }
 
     protected int currentStep = 0;

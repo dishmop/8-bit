@@ -6,7 +6,7 @@ public class MainMenuChooser : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        for (int i = 0; i < GameManager.gatelevels.Length; i++)
+        for (int i = 1; i < GameManager.gatelevels.Length; i++)
         {
             GameObject item = (GameObject)Instantiate(itemPrefab);
             item.transform.SetParent(transform);

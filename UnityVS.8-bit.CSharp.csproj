@@ -76,6 +76,7 @@
     <Compile Include="Assets\ConnectorComponent.cs" />
     <Compile Include="Assets\EmptyGateComponent.cs" />
     <Compile Include="Assets\GameManager.cs" />
+    <Compile Include="Assets\HintButton.cs" />
     <Compile Include="Assets\InputInputConnectorComponent.cs" />
     <Compile Include="Assets\InputOutputCollider.cs" />
     <Compile Include="Assets\InputOutputConnectorComponent.cs" />

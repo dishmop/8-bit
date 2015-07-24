@@ -20,11 +20,12 @@ public class menuItem : MonoBehaviour {
         else
         {
             background.color = Color.gray;
+            GetComponent<Button>().enabled = false;
         }
 
         if (itemlevel.Done())
         {
-            background.color = Color.green;
+            background.color = new Color(0.1f,0.1f,0.1f,1.0f);
         }
 	}
 
@@ -40,6 +41,7 @@ public class menuItem : MonoBehaviour {
             // in main menu, play the level
             if(!itemlevel.Done() && itemlevel.isAvailable())
             {
+                ToolTip.instance.Click2();
                 Level.instance = itemlevel;
                 GameManager.instance.LoadLevel(1);
             }

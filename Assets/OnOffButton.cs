@@ -42,11 +42,11 @@ public class OnOffButton : MonoBehaviour {
 
             if (isOn)
             {
-                image.color = Color.green;
+                image.color = Color.white;
             }
             else
             {
-                image.color = Color.black;
+                image.color = Color.green;
             }
         } else
         {

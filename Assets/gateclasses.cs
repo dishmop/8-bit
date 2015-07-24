@@ -253,6 +253,31 @@ public class Output {
 
 public class Gate {
 
+    public static int findLCM(int a, int b) //method for finding LCM with parameters a and b
+    {
+        int num1, num2;                         //taking input from user by using num1 and num2 variables
+        if (a > b)
+        {
+            num1 = a; num2 = b;
+        }
+        else
+        {
+            num1 = b; num2 = a;
+        }
+
+        for (int i = 1; i <= num2; i++)
+        {
+            if ((num1 * i) % num2 == 0)
+            {
+                return i * num1;
+            }
+        }
+        return num2;
+    }
+
+    int delaytime;
+
+
     public GateComponent component;
 
     public int depth = 0;
@@ -426,6 +451,17 @@ public class Gate {
 
     public void Update()
     {
+        if(gates.Count > 0)
+        {
+            delaytime = 0;
+            foreach (KeyValuePair<int, Gate> gate in gates)
+            {
+                delaytime += gate.Value.delaytime;
+            }
+        } else{
+            delaytime = 1;
+        }
+
         if(parentGate!=null)
         {
             depth = parentGate.depth + 1;
@@ -456,12 +492,22 @@ public class Gate {
         }
     }
 
+    int framecount = 0;
+
     public void LateUpdate()
     {
-        foreach (KeyValuePair<int, Output> output in childOutputs)
-        {
-            output.Value.Update();
-        }
+        //framecount++;
+        //if (framecount >= delaytime)
+        //{
+        //    framecount = 0;
+
+
+            foreach (KeyValuePair<int, Output> output in childOutputs)
+            {
+
+                output.Value.Update();
+            }
+        //}
 
         foreach (KeyValuePair<int, Gate> gate in gates)
         {
@@ -471,16 +517,6 @@ public class Gate {
 
     public void Save(string name)
     {
-        int spritenum = -1;
-        // test if the name is recognised
-        for(int i=0; i<GameManager.gatelevels.Length; i++)
-        {
-            if(name == GameManager.gatelevels[i].name)
-            {
-                spritenum = i;
-            }
-        }
-
         XmlWriterSettings settings = new XmlWriterSettings();
         settings.Indent = true;
         settings.IndentChars = ("\t");
@@ -489,7 +525,7 @@ public class Gate {
         XmlWriter writer = XmlWriter.Create(Application.persistentDataPath + "/" + name + ".xml", settings);
         writer.WriteStartDocument();
 
-        Save(writer,0,0, spritenum);
+        Save(writer,0,0);
 
         writer.WriteEndDocument();
         writer.Close();
@@ -497,7 +533,7 @@ public class Gate {
         Debug.Log("Saved to " + Application.persistentDataPath + "/" + name + ".xml");
     }
 
-    public void Save(XmlWriter writer, int index, int depth, int spritenum)
+    public void Save(XmlWriter writer, int index, int depth)
     {
         writer.WriteStartElement("gate");
         writer.WriteAttributeString("index", index.ToString());
@@ -506,7 +542,7 @@ public class Gate {
         if(depth==1)
         {
             // STORE SPRITENUM HERE
-            writer.WriteAttributeString("spritenum", spritenum.ToString());
+            writer.WriteAttributeString("spritenum", Level.instance.spritenum.ToString());
         }
 
         int x = 0;
@@ -562,7 +598,7 @@ public class Gate {
 
         foreach(KeyValuePair<int, Gate> gate in gates)
         {
-            gate.Value.Save(writer, gate.Key, depth+1, spritenum);
+            gate.Value.Save(writer, gate.Key, depth+1);
         }
 
         writer.WriteEndElement();
