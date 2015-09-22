@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// each Level represents a component which can be used, and an associated xml file. These are saved when each level is completed
 abstract public class Level
 {
     public static Level instance;
@@ -12,6 +13,9 @@ abstract public class Level
     public int numInputs;
     public int numOutputs;
 
+    public string[] inputName = {"1","2","3","4"};
+    public string[] outputName = {"1", "2", "3", "4"};
+
     public string name;
 
     public string hint;
@@ -21,10 +25,11 @@ abstract public class Level
     public Level[] prerequisites;
 
     public string description;
-
+    
     public bool Done()
     {
-        return System.IO.File.Exists(Application.persistentDataPath + "/" + name + ".xml");
+        //return System.IO.File.Exists(Application.persistentDataPath + "/" + name + ".xml");
+        return PlayerPrefs.HasKey(name);
     }
 
     public bool isAvailable()
@@ -80,7 +85,9 @@ abstract public class Level
     void Succeeded()
     {
         //Application.LoadLevel(2);
-        GameManager.instance.topComponent.Save(name);
+        string xml;
+        GameManager.instance.topComponent.Save(out xml);
+        PlayerPrefs.SetString(name, xml);
         GameManager.instance.testingPanel.GetComponent<TestingPanel>().fading = true;
         GameManager.instance.testingPanel.GetComponent<TestingPanel>().success = true;
         ToolTip.instance.Success();
@@ -553,6 +560,11 @@ public class SRLevel : Level
         prerequisites = new Level[] { new NorLevel() };
 
         hint = "What happens if we take two NOR gates, and connect the output of one to an input of the other, and vice versa";
+
+        inputName[0] = "R";
+        inputName[1] = "S";
+        outputName[0] = "Q";
+        outputName[1] = "Q'";
     }
 
 
@@ -594,6 +606,12 @@ public class SRGatedLevel : Level
         prerequisites = new Level[] { new SRLevel(), new AndLevel() };
 
         hint = "Start with an SR latch and add gates to check whether E is on.";
+
+        inputName[0] = "R";
+        inputName[1] = "E";
+        inputName[2] = "S";
+        outputName[0] = "Q";
+        outputName[1] = "Q'";
     }
 
 
@@ -630,20 +648,25 @@ public class SRGatedLevel : Level
     }
 }
 
-public class DLevel : Level
+public class DGatedLevel : Level
 {
-    public DLevel()
+    public DGatedLevel()
     {
         numInputs = 2;
         numOutputs = 2;
 
-        description = "'D' flip-flop. If E is on, first output is same as D, second is opposite. If E is off, the state holds.";
-        name = "D";
+        description = "Gated 'D' latch. If E is on, first output is same as D, second is opposite. If E is off, the state holds.";
+        name = "DGated";
         spritenum = 12;
 
         prerequisites = new Level[] { new SRGatedLevel() };
 
         hint = "Use a gated SR latch and control both S and R from one input.";
+
+        inputName[0] = "D";
+        inputName[1] = "E";
+        outputName[0] = "Q";
+        outputName[1] = "Q'";
     }
 
 
@@ -671,6 +694,61 @@ public class DLevel : Level
                 break;
             case 6:
                 testConfiguration(new bool[] { false, false }, new bool[] { false, true });
+                break;
+            case 7:
+                return true;
+        }
+
+        return false;
+    }
+}
+
+public class DLevel : Level
+{
+    public DLevel()
+    {
+        numInputs = 2;
+        numOutputs = 2;
+
+        description = "'D' flip-flop. When C turns on, the first output becomes the same as D, the second opposite.";
+        name = "D";
+        spritenum = 13;
+
+        prerequisites = new Level[] { new DGatedLevel() };
+
+        hint = "Use two gated D latches, one feeding into the next, with the Es opposite.";
+
+        inputName[0] = "D";
+        inputName[1] = "C";
+        outputName[0] = "Q";
+        outputName[1] = "Q'";
+    }
+
+
+    protected override bool Test()
+    {
+        switch (currentStep)
+        {
+            case 0:
+                testConfiguration(new bool[] { false, true }, new bool[] { false, true });
+                break;
+            case 1:
+                testConfiguration(new bool[] { false, false }, new bool[] { false, true });
+                break;
+            case 2:
+                testConfiguration(new bool[] { true, false }, new bool[] { false, true });
+                break;
+            case 3:
+                testConfiguration(new bool[] { false, false }, new bool[] { false, true });
+                break;
+            case 4:
+                testConfiguration(new bool[] { true, false }, new bool[] { false, true });
+                break;
+            case 5:
+                testConfiguration(new bool[] { true, true }, new bool[] { true, false });
+                break;
+            case 6:
+                testConfiguration(new bool[] { false, true }, new bool[] { true, false });
                 break;
             case 7:
                 return true;

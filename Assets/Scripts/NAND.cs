@@ -15,7 +15,7 @@ public class NandGate : Gate
 
     protected override void UpdateOutputs()
     {
-        parentGate.childOutputs[ownOutputs[0]].IsOnNew = !(parentGate.childInputs[ownInputs[0]].isOn && parentGate.childInputs[ownInputs[1]].isOn);
+        parentGate.childOutputs[ownOutputs[0]].IsOn = !(parentGate.childInputs[ownInputs[0]].isOn && parentGate.childInputs[ownInputs[1]].isOn);
     }
 }
 

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class menuItem : MonoBehaviour {
+public class menuItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
     public Image image;
     public Image background;
 
@@ -29,13 +30,26 @@ public class menuItem : MonoBehaviour {
         }
 	}
 
-    public void OnClick()
+    public void OnPointerDown(PointerEventData ped)
     {
         if (Application.loadedLevel != 0)
         {
             // in game, create the object
-            GameManager.instance.topComponent.LoadComponent(itemlevel.name);
+            var comp = GameManager.instance.topComponent.LoadComponent(PlayerPrefs.GetString(itemlevel.name));
+
+            GameManager.instance.movingcomp = comp;
+            GameManager.instance.positionRelative = new Vector3(0,0,10);
         }
+    }
+
+
+    public void OnPointerUp(PointerEventData ped)
+    {
+
+    }
+
+    public void OnClick()
+    {
         if(Application.loadedLevel == 0)
         {
             // in main menu, play the level
@@ -44,14 +58,14 @@ public class menuItem : MonoBehaviour {
                 ToolTip.instance.Click2();
                 Level.instance = itemlevel;
 
-                if (itemlevel.name == "NOT")
-                {
-                    GameManager.instance.LoadLevel(2);
-                }
-                else
-                {
+                //if (itemlevel.name == "NOT")
+                //{
+                //    GameManager.instance.LoadLevel(2);
+                //}
+                //else
+                //{
                     GameManager.instance.LoadLevel(1);
-                }
+//                }
             }
         }
     }

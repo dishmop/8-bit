@@ -81,8 +81,8 @@ public class InputInputConnector : Connector
         if (parentGate.childInputs.ContainsKey(input))
         parentGate.childInputs[input].connector = -1;
 
-        if (parentGate.parentGate.childInputs.ContainsKey(childInput))
-        parentGate.parentGate.childInputs[childInput].connector = -1;
+ //       if (parentGate.parentGate.childInputs.ContainsKey(childInput))
+//        parentGate.parentGate.childInputs[childInput].connector = -1;
 
         parentGate.connectors.Remove(connectorNum);
     }
@@ -192,26 +192,23 @@ public class Output {
 
     public int inputConnector = -1;
 
-    bool isOn;
+    //bool isOn;
 
-    public void Update()
-    {
-        if (GameManager.instance.testing)
-        {
-            isOn = IsOnNew;
-        }
-        else
-        {
-            isOn = false;
-        }
-    }
+    //public void Update()
+    //{
+    //    if (GameManager.instance.testing)
+    //    {
+    //        isOn = IsOnNew;
+    //    }
+    //    else
+    //    {
+    //        isOn = false;
+    //    }
+    //}
 
-    public bool IsOn
-    {
-        get { return isOn; }
-    }
+    public bool IsOn;
 
-    public bool IsOnNew;
+    //public bool IsOnNew;
 
     public void Save(XmlWriter writer, int index)
     {
@@ -486,28 +483,22 @@ public class Gate {
         foreach(KeyValuePair<int,int> output in ownOutputs)
         {
             if (parentGate.childOutputs[output.Value].inputConnector >= 0)
-                parentGate.childOutputs[output.Value].IsOnNew = connectors[parentGate.childOutputs[output.Value].inputConnector].IsOn;
-//            else
-//                Debug.Log("problem!");
+            {
+                parentGate.childOutputs[output.Value].IsOn = connectors[parentGate.childOutputs[output.Value].inputConnector].IsOn;
+                //parentGate.childOutputs[output.Value].Update();
+            }
+
+            //parentGate.childOutputs[output.Value].Update();
         }
     }
 
-    int framecount = 0;
 
     public void LateUpdate()
     {
-        //framecount++;
-        //if (framecount >= delaytime)
-        //{
-        //    framecount = 0;
-
-
-            foreach (KeyValuePair<int, Output> output in childOutputs)
-            {
-
-                output.Value.Update();
-            }
-        //}
+//        foreach (KeyValuePair<int, Output> output in childOutputs)
+//        {
+////            output.Value.Update();
+//        }
 
         foreach (KeyValuePair<int, Gate> gate in gates)
         {
@@ -515,14 +506,24 @@ public class Gate {
         }
     }
 
-    public void Save(string name)
+
+
+
+
+
+
+
+
+    public void Save(out string xml)
     {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
         XmlWriterSettings settings = new XmlWriterSettings();
-        settings.Indent = true;
+        settings.Indent = false;
         settings.IndentChars = ("\t");
         settings.OmitXmlDeclaration = true;
 
-        XmlWriter writer = XmlWriter.Create(Application.persistentDataPath + "/" + name + ".xml", settings);
+        //XmlWriter writer = XmlWriter.Create(Application.persistentDataPath + "/" + name + ".xml", settings);
+        XmlWriter writer = XmlWriter.Create(sb);
         writer.WriteStartDocument();
 
         Save(writer,0,0);
@@ -530,7 +531,9 @@ public class Gate {
         writer.WriteEndDocument();
         writer.Close();
 
-        Debug.Log("Saved to " + Application.persistentDataPath + "/" + name + ".xml");
+        xml = sb.ToString();
+
+        //Debug.Log("Saved to " + Application.persistentDataPath + "/" + name + ".xml");
     }
 
     public void Save(XmlWriter writer, int index, int depth)
@@ -604,16 +607,19 @@ public class Gate {
         writer.WriteEndElement();
     }
 
-    public void Load(string name)
+    public GateComponent Load(string xml)
     {
         XmlDocument document = new XmlDocument();
-        document.Load(Application.persistentDataPath + "/" + name + ".xml");
+        //document.Load(Application.persistentDataPath + "/" + name + ".xml");
 
-        Load(document.ChildNodes[0]);
+        document.LoadXml(xml);
+
+        return Load(document.ChildNodes[document.ChildNodes.Count-1]);
     }
 
-    public void Load(XmlNode node)
+    public GateComponent Load(XmlNode node)
     {
+        GateComponent newcomponent = null;
         Dictionary<int, int> oldToNewGates = new Dictionary<int, int>();
         Dictionary<int, int> oldToNewInputs = new Dictionary<int, int>();
         Dictionary<int, int> oldToNewOutputs = new Dictionary<int, int>();
@@ -623,42 +629,41 @@ public class Gate {
         {
             if(child.Name == "gate")
             {
-                GateComponent component;
                 if(child.Attributes["type"].Value == "Gate")
                 {
-                    component = ((GameObject)Object.Instantiate(Resources.Load("empty"))).GetComponent<EmptyGateComponent>();
+                    newcomponent = ((GameObject)Object.Instantiate(Resources.Load("empty"))).GetComponent<EmptyGateComponent>();
                 
                     if(child.Attributes["spritenum"]!=null)
                     {
-                        ((EmptyGateComponent)component).spritenum = System.Int32.Parse(child.Attributes["spritenum"].Value);
+                        ((EmptyGateComponent)newcomponent).spritenum = System.Int32.Parse(child.Attributes["spritenum"].Value);
                     }
                 } else if(child.Attributes["type"].Value == "NandGate")
                 {
-                    component = ((GameObject)Object.Instantiate(Resources.Load("nandgate"))).GetComponent<NAND>();
+                    newcomponent = ((GameObject)Object.Instantiate(Resources.Load("nandgate"))).GetComponent<NAND>();
                 }
                 else
                 {
                     throw new System.FormatException();
                 }
 
-                if(component!=null)
+                if(newcomponent!=null)
                 {
                     int x = System.Int32.Parse(child.Attributes["x"].Value);
                     int y = System.Int32.Parse(child.Attributes["y"].Value);
 
                     if(this.component!=null)
                     {
-                        component.transform.position = this.component.transform.position + new Vector3(x, y, 0);
+                        newcomponent.transform.position = this.component.transform.position + new Vector3(x, y, 0);
 
-                        component.transform.SetParent(this.component.transform);
+                        newcomponent.transform.SetParent(this.component.transform);
                     }
                     else
                     {
-                        component.transform.position = new Vector3(x, y, 0);
+                        newcomponent.transform.position = new Vector3(x, y, 0);
                     }
                 }
 
-                Gate gate = component.gate;
+                Gate gate = newcomponent.gate;
                 
                 int gateNum = 0;
                 while (gates.ContainsKey(gateNum))
@@ -800,6 +805,8 @@ public class Gate {
                 }
             }
         }
+
+        return newcomponent;
     }
 
     public void AddInput(int num)
@@ -840,6 +847,23 @@ public class Gate {
         parentGate.gates.Remove(gateNum);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 public abstract class GateComponent : MonoBehaviour
 {

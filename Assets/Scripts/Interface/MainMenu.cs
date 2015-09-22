@@ -25,4 +25,10 @@ public class MainMenu : MonoBehaviour {
     {
         ToolTip.instance.visible = false;
     }
+
+    public void ClearAllData()
+    {
+        PlayerPrefs.DeleteAll();
+        Application.LoadLevel(0);
+    }
 }

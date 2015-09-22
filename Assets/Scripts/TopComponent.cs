@@ -34,13 +34,13 @@ public class TopComponent : GateComponent
         base.Update();
     }
 
-    public void LoadComponent(string name)
+    public GateComponent LoadComponent(string xml)
     {
-        gate.gates[0].Load(name);
+        return gate.gates[0].Load(xml);
     }
 
-    public void Save(string name)
+    public void Save(out string xml)
     {
-        gate.Save(name);
+        gate.Save(out xml);
     }
 }

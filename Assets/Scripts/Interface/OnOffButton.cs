@@ -10,10 +10,15 @@ public class OnOffButton : MonoBehaviour {
     public int inputNum = -1;
     public int outputNum = -1;
 
+    public KeyCode key;
+
+    Text displaytext;
+
     Image image;
 	// Use this for initialization
 	void Start () {
         image = GetComponent<Image>();
+        displaytext = GetComponentInChildren<Text>();
 	}
 	
 	// Update is called once per frame
@@ -24,6 +29,12 @@ public class OnOffButton : MonoBehaviour {
             {
                 isOn = GameManager.instance.topComponent.gate.childOutputs[outputNum].IsOn;
                 enabled = true;
+
+                displaytext.text = Level.instance.outputName[outputNum];
+            }
+            else
+            {
+                displaytext.text = "";
             }
         }
 
@@ -34,6 +45,12 @@ public class OnOffButton : MonoBehaviour {
                 enabled = true;
 
                 isOn = GameManager.instance.topComponent.inputs[inputNum];
+
+                displaytext.text = Level.instance.inputName[inputNum];
+            }
+            else
+            {
+                displaytext.text = "";
             }
         }
 
@@ -42,15 +59,27 @@ public class OnOffButton : MonoBehaviour {
 
             if (isOn)
             {
-                image.color = Color.white;
+                image.color = Color.green;
             }
             else
             {
-                image.color = Color.green;
+                image.color = Color.gray;
             }
         } else
         {
-            image.color = Color.grey;
+            image.color = Color.black;
+        }
+
+        if (inputNum >= 0 && UnityEngine.Input.GetKeyDown(key))
+        {
+            isOn = true;
+            GameManager.instance.topComponent.inputs[inputNum] = isOn;
+        }
+
+        if (inputNum >= 0 && UnityEngine.Input.GetKeyUp(key))
+        {
+            isOn = false;
+            GameManager.instance.topComponent.inputs[inputNum] = isOn;
         }
 	}
 

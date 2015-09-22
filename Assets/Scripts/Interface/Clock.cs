@@ -13,7 +13,7 @@ public class Clock : MonoBehaviour {
 	    if(isOn)
         {
             frames++;
-            if(frames == 40)
+            if(frames == 10)
             {
                 button.OnClick();
                 frames = 0;

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 744997e26b26c1241b351386c2491a38
-timeCreated: 1437744622
+timeCreated: 1442917039
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -17,6 +17,7 @@ TextureImporter:
     21300020: gates_10
     21300022: gates_11
     21300024: gates_12
+    21300026: gates_13
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -186,6 +187,16 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gates_13
+      rect:
+        serializedVersion: 2
+        x: 128
         y: 0
         width: 128
         height: 128

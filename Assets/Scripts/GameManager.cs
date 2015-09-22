@@ -17,10 +17,10 @@ public class GameManager : MonoBehaviour {
 
     public Collider2D hitcollider;
 
-    bool moving;
-    GateComponent movingcomp;
+    //bool moving;
+    public GateComponent movingcomp;
 
-    public static Level[] gatelevels = { new NandLevel(), new NotLevel(), new AndLevel(), new OrLevel(), new NorLevel(), new XorLevel(), new XnorLevel(), new And3Level(), new Or3Level(), new Nand3Level(), new SRLevel(), new SRGatedLevel(), new DLevel() };
+    public static Level[] gatelevels = { new NandLevel(), new NotLevel(), new AndLevel(), new OrLevel(), new NorLevel(), new XorLevel(), new XnorLevel(), new And3Level(), new Or3Level(), new Nand3Level(), new SRLevel(), new SRGatedLevel(), new DGatedLevel(), new DLevel() };
 
     public TopComponent topComponent;
 
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
 
     public bool testing;
 
-    Vector3 positionRelative;
+    public Vector3 positionRelative;
 
     void Start ()
     {
@@ -51,35 +51,71 @@ public class GameManager : MonoBehaviour {
 
         Vector3[] linepoints = new Vector3[2];
         line = new VectorLine("line", linepoints, null, 2.0f);
-        line.color = Color.green;
+        line.color = Color.gray;
 
-        if(!System.IO.File.Exists(Application.persistentDataPath + "/NAND.xml"))
+        if (!PlayerPrefs.HasKey("NAND"))
         {
             // lolololol
             string[] lines = {
-"<gate index=\"0\" type=\"Gate\" x=\"0\" y=\"0\">",
-	"<input index=\"0\" attachedGate=\"0\" connector=\"-1\" inputNum=\"0\" />",
-	"<input index=\"1\" attachedGate=\"0\" connector=\"-1\" inputNum=\"1\" />",
-	"<output index=\"0\" attachedGate=\"0\" connector=\"-1\" outputNum=\"0\" inputConnector=\"2\" />",
-	"<gate index=\"0\" type=\"Gate\" x=\"0\" y=\"0\" spritenum=\"0\">",
-		"<ownInput index=\"0\" num=\"0\" />",
-		"<ownInput index=\"1\" num=\"1\" />",
-		"<ownOutput index=\"0\" num=\"0\" />",
-		"<input index=\"0\" attachedGate=\"0\" connector=\"0\" inputNum=\"0\" />",
-		"<input index=\"1\" attachedGate=\"0\" connector=\"1\" inputNum=\"1\" />",
-		"<output index=\"0\" attachedGate=\"0\" connector=\"2\" outputNum=\"0\" inputConnector=\"-1\" />",
-		"<ininconnector index=\"0\" input=\"0\" childInput=\"0\" />",
-		"<ininconnector index=\"1\" input=\"1\" childInput=\"1\" />",
-		"<outoutconnector index=\"2\" childOutput=\"0\" output=\"0\" />",
-		"<gate index=\"0\" type=\"NandGate\" x=\"0\" y=\"30\">",
-			"<ownInput index=\"0\" num=\"0\" />",
-			"<ownInput index=\"1\" num=\"1\" />",
-			"<ownOutput index=\"0\" num=\"0\" />",
-		"</gate>",
-	"</gate>",
-"</gate>"};
-            System.IO.File.WriteAllLines(Application.persistentDataPath + "/NAND.xml", lines);
+            "<gate index=\"0\" type=\"Gate\" x=\"0\" y=\"0\">",
+                "<input index=\"0\" attachedGate=\"0\" connector=\"-1\" inputNum=\"0\" />",
+                "<input index=\"1\" attachedGate=\"0\" connector=\"-1\" inputNum=\"1\" />",
+                "<output index=\"0\" attachedGate=\"0\" connector=\"-1\" outputNum=\"0\" inputConnector=\"2\" />",
+                "<gate index=\"0\" type=\"Gate\" x=\"0\" y=\"0\" spritenum=\"0\">",
+                    "<ownInput index=\"0\" num=\"0\" />",
+                    "<ownInput index=\"1\" num=\"1\" />",
+                    "<ownOutput index=\"0\" num=\"0\" />",
+                    "<input index=\"0\" attachedGate=\"0\" connector=\"0\" inputNum=\"0\" />",
+                    "<input index=\"1\" attachedGate=\"0\" connector=\"1\" inputNum=\"1\" />",
+                    "<output index=\"0\" attachedGate=\"0\" connector=\"2\" outputNum=\"0\" inputConnector=\"-1\" />",
+                    "<ininconnector index=\"0\" input=\"0\" childInput=\"0\" />",
+                    "<ininconnector index=\"1\" input=\"1\" childInput=\"1\" />",
+                    "<outoutconnector index=\"2\" childOutput=\"0\" output=\"0\" />",
+                    "<gate index=\"0\" type=\"NandGate\" x=\"0\" y=\"30\">",
+                        "<ownInput index=\"0\" num=\"0\" />",
+                        "<ownInput index=\"1\" num=\"1\" />",
+                        "<ownOutput index=\"0\" num=\"0\" />",
+                    "</gate>",
+                "</gate>",
+            "</gate>"};
+
+
+        string xml = "";
+
+        foreach(var x in lines){
+            xml+=x;
         }
+
+            PlayerPrefs.SetString("NAND", xml);
+        }
+
+//        if(!System.IO.File.Exists(Application.persistentDataPath + "/NAND.xml"))
+//        {
+//            // lolololol
+//            string[] lines = {
+//"<gate index=\"0\" type=\"Gate\" x=\"0\" y=\"0\">",
+//    "<input index=\"0\" attachedGate=\"0\" connector=\"-1\" inputNum=\"0\" />",
+//    "<input index=\"1\" attachedGate=\"0\" connector=\"-1\" inputNum=\"1\" />",
+//    "<output index=\"0\" attachedGate=\"0\" connector=\"-1\" outputNum=\"0\" inputConnector=\"2\" />",
+//    "<gate index=\"0\" type=\"Gate\" x=\"0\" y=\"0\" spritenum=\"0\">",
+//        "<ownInput index=\"0\" num=\"0\" />",
+//        "<ownInput index=\"1\" num=\"1\" />",
+//        "<ownOutput index=\"0\" num=\"0\" />",
+//        "<input index=\"0\" attachedGate=\"0\" connector=\"0\" inputNum=\"0\" />",
+//        "<input index=\"1\" attachedGate=\"0\" connector=\"1\" inputNum=\"1\" />",
+//        "<output index=\"0\" attachedGate=\"0\" connector=\"2\" outputNum=\"0\" inputConnector=\"-1\" />",
+//        "<ininconnector index=\"0\" input=\"0\" childInput=\"0\" />",
+//        "<ininconnector index=\"1\" input=\"1\" childInput=\"1\" />",
+//        "<outoutconnector index=\"2\" childOutput=\"0\" output=\"0\" />",
+//        "<gate index=\"0\" type=\"NandGate\" x=\"0\" y=\"30\">",
+//            "<ownInput index=\"0\" num=\"0\" />",
+//            "<ownInput index=\"1\" num=\"1\" />",
+//            "<ownOutput index=\"0\" num=\"0\" />",
+//        "</gate>",
+//    "</gate>",
+//"</gate>"};
+//            System.IO.File.WriteAllLines(Application.persistentDataPath + "/NAND.xml", lines);
+//        }
     }
 	
 	void Update () {
@@ -186,7 +222,7 @@ public class GameManager : MonoBehaviour {
             {
                 if(EventSystem.current.IsPointerOverGameObject())
                 {
-                    movingcomp.gate.Remove();
+                 movingcomp.gate.Remove();
                 }
             }
 

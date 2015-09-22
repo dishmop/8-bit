@@ -8,7 +8,7 @@ public class InputOutputCollider : MonoBehaviour {
 
     public bool visible = true;
 
-    bool mouseOver;
+    //bool mouseOver;
 	
 	void Update()
     {
