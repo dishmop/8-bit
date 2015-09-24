@@ -90,8 +90,8 @@ public class InputInputConnector : Connector
 
 public class OutputOutputConnector : Connector
 {
-    public int childOuput;
-    public int output;
+    public int childOuput = -1;
+    public int output = -1;
 
     public override bool IsOn
     {
@@ -114,11 +114,29 @@ public class OutputOutputConnector : Connector
         Object.Destroy(component.gameObject);
 
         if(parentGate.parentGate.childOutputs.ContainsKey(childOuput))
-        parentGate.parentGate.childOutputs[childOuput].inputConnector = -1;
+            parentGate.parentGate.childOutputs[childOuput].inputConnector = -1;
 
         if (parentGate.childOutputs.ContainsKey(output))
-        if (parentGate.childOutputs[output].connectors.Contains(connectorNum))
-            parentGate.childOutputs[output].connectors.Remove(connectorNum);
+        {
+            if (parentGate.childOutputs[output].connectors.Contains(connectorNum)) { 
+                parentGate.childOutputs[output].connectors.Remove(connectorNum);
+                }
+        }
+
+        parentGate.connectors.Remove(connectorNum);
+    }
+
+    public void RemoveInput()
+    {
+        Object.Destroy(component.gameObject);
+
+        if (parentGate.childOutputs.ContainsKey(output))
+        {
+            if (parentGate.childOutputs[output].connectors.Contains(connectorNum))
+            {
+                parentGate.childOutputs[output].connectors.Remove(connectorNum);
+            }
+        }
 
         parentGate.connectors.Remove(connectorNum);
     }
@@ -241,7 +259,14 @@ public class Output {
 
         if(inputConnector!=-1)
         {
-            parentGate.gates[attachedGate].connectors[inputConnector].Remove();
+            if (parentGate.gates[attachedGate].connectors[inputConnector].GetType() == typeof(OutputOutputConnector))
+            {
+                ((OutputOutputConnector)parentGate.gates[attachedGate].connectors[inputConnector]).RemoveInput();
+            }
+            else
+            {
+                parentGate.gates[attachedGate].connectors[inputConnector].Remove();
+            }
         }
 
         parentGate.childOutputs.Remove(parentGate.gates[attachedGate].ownOutputs[outputNum]);
@@ -271,9 +296,6 @@ public class Gate {
         }
         return num2;
     }
-
-    int delaytime;
-
 
     public GateComponent component;
 
@@ -448,16 +470,6 @@ public class Gate {
 
     public void Update()
     {
-        if(gates.Count > 0)
-        {
-            delaytime = 0;
-            foreach (KeyValuePair<int, Gate> gate in gates)
-            {
-                delaytime += gate.Value.delaytime;
-            }
-        } else{
-            delaytime = 1;
-        }
 
         if(parentGate!=null)
         {

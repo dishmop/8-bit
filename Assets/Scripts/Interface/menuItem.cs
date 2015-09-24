@@ -35,7 +35,7 @@ public class menuItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
         if (Application.loadedLevel != 0)
         {
             // in game, create the object
-            var comp = GameManager.instance.topComponent.LoadComponent(PlayerPrefs.GetString(itemlevel.name));
+            GateComponent comp = GameManager.instance.topComponent.LoadComponent(PlayerPrefs.GetString(itemlevel.name));
 
             GameManager.instance.movingcomp = comp;
             GameManager.instance.positionRelative = new Vector3(0,0,10);

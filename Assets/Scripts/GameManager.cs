@@ -143,28 +143,31 @@ public class GameManager : MonoBehaviour {
                 // connect two components same level
                 if(first.attachedGate.parentGate == current.attachedGate.parentGate)
                 {
-                    if(first.isInput && !current.isInput)
+                    if (first.attachedGate.parentGate != topComponent.gate)
                     {
-                        if (first.attachedGate.parentGate.childInputs[first.attachedGate.ownInputs[first.inputOutputNum]].connector != -1)
+                        if (first.isInput && !current.isInput)
                         {
-                           first.attachedGate.parentGate.connectors[first.attachedGate.parentGate.childInputs[first.attachedGate.ownInputs[first.inputOutputNum]].connector].Remove();
+                            if (first.attachedGate.parentGate.childInputs[first.attachedGate.ownInputs[first.inputOutputNum]].connector != -1)
+                            {
+                                first.attachedGate.parentGate.connectors[first.attachedGate.parentGate.childInputs[first.attachedGate.ownInputs[first.inputOutputNum]].connector].Remove();
+                            }
+
+                            InputOutputConnectorComponent io1 = ((GameObject)Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
+                            first.attachedGate.parentGate.Connect(current.attachedGate, current.inputOutputNum, first.attachedGate, first.inputOutputNum, (InputOutputConnector)io1.connector);
+
                         }
 
-                        InputOutputConnectorComponent io1 = ((GameObject)Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
-                        first.attachedGate.parentGate.Connect(current.attachedGate, current.inputOutputNum, first.attachedGate, first.inputOutputNum, (InputOutputConnector)io1.connector);
-     
-                    }
-
-                    if( !first.isInput && current.isInput)
-                    {
-                        if (current.attachedGate.parentGate.childInputs[current.attachedGate.ownInputs[current.inputOutputNum]].connector != -1)
+                        if (!first.isInput && current.isInput)
                         {
-                            current.attachedGate.parentGate.connectors[current.attachedGate.parentGate.childInputs[current.attachedGate.ownInputs[current.inputOutputNum]].connector].Remove();
+                            if (current.attachedGate.parentGate.childInputs[current.attachedGate.ownInputs[current.inputOutputNum]].connector != -1)
+                            {
+                                current.attachedGate.parentGate.connectors[current.attachedGate.parentGate.childInputs[current.attachedGate.ownInputs[current.inputOutputNum]].connector].Remove();
+                            }
+
+                            InputOutputConnectorComponent io1 = ((GameObject)Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
+                            first.attachedGate.parentGate.Connect(first.attachedGate, first.inputOutputNum, current.attachedGate, current.inputOutputNum, (InputOutputConnector)io1.connector);
+
                         }
-
-                        InputOutputConnectorComponent io1 = ((GameObject)Instantiate(Resources.Load("inoutconnector"))).GetComponent<InputOutputConnectorComponent>();
-                        first.attachedGate.parentGate.Connect(first.attachedGate, first.inputOutputNum, current.attachedGate, current.inputOutputNum, (InputOutputConnector)io1.connector);
-
                     }
                 }
 
@@ -220,7 +223,11 @@ public class GameManager : MonoBehaviour {
         {
             if(movingcomp!=null)
             {
-                if(EventSystem.current.IsPointerOverGameObject())
+                if(EventSystem.current.IsPointerOverGameObject() || 
+                    UnityEngine.Input.mousePosition.x > Screen.width ||
+                    UnityEngine.Input.mousePosition.x < 0 ||
+                    UnityEngine.Input.mousePosition.y > Screen.height ||
+                    UnityEngine.Input.mousePosition.y < 0)
                 {
                  movingcomp.gate.Remove();
                 }
