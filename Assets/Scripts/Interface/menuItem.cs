@@ -6,11 +6,17 @@ using UnityEngine.EventSystems;
 public class menuItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
     public Image image;
     public Image background;
+    public GameObject tutorialText;
 
     public Level itemlevel;
 
 	public void Setup () {
         image.sprite = Resources.LoadAll<Sprite>("gates")[itemlevel.spritenum];
+
+        if (Application.loadedLevel != 0 || itemlevel.name != "NOT")
+        {
+            tutorialText.SetActive(false);
+        }
 	}
 	
 	void Update () {
@@ -58,14 +64,14 @@ public class menuItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
                 ToolTip.instance.Click2();
                 Level.instance = itemlevel;
 
-                //if (itemlevel.name == "NOT")
-                //{
-                //    GameManager.instance.LoadLevel(2);
-                //}
-                //else
-                //{
+                if (itemlevel.name == "NOT")
+                {
+                    GameManager.instance.LoadLevel(2);
+                }
+                else
+                {
                     GameManager.instance.LoadLevel(1);
-//                }
+                }
             }
         }
     }

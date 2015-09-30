@@ -70,13 +70,13 @@ public class OnOffButton : MonoBehaviour {
             image.color = Color.black;
         }
 
-        if (inputNum >= 0 && UnityEngine.Input.GetKeyDown(key))
+        if (inputNum >= 0 && UnityEngine.Input.GetKeyDown(key) && GameManager.instance.topComponent.inputs.Count > inputNum)
         {
             isOn = true;
             GameManager.instance.topComponent.inputs[inputNum] = isOn;
         }
 
-        if (inputNum >= 0 && UnityEngine.Input.GetKeyUp(key))
+        if (inputNum >= 0 && UnityEngine.Input.GetKeyUp(key) && GameManager.instance.topComponent.inputs.Count > inputNum)
         {
             isOn = false;
             GameManager.instance.topComponent.inputs[inputNum] = isOn;

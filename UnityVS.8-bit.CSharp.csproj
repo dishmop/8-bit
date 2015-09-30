@@ -90,8 +90,8 @@
     <Compile Include="Assets\Scripts\Interface\SetupResolution.cs" />
     <Compile Include="Assets\Scripts\Interface\TestingPanel.cs" />
     <Compile Include="Assets\Scripts\Interface\ToolTip.cs" />
+    <Compile Include="Assets\Scripts\Interface\TutorialManager.cs" />
     <Compile Include="Assets\Scripts\Interface\menuItem.cs" />
-    <Compile Include="Assets\Scripts\Interface\tutorial.cs" />
     <Compile Include="Assets\Scripts\NAND.cs" />
     <Compile Include="Assets\Scripts\OutputOutputConnectorComponent.cs" />
     <Compile Include="Assets\Scripts\QuitOnEsc.cs" />

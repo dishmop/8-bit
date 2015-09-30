@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour {
 
     public GameObject testingPanel;
 
+    public bool interactable = true;
+
     public int numInputs
     {
         get
@@ -122,7 +124,7 @@ public class GameManager : MonoBehaviour {
         if(Level.instance!=null)
         Level.instance.Update();
 
-	    if(UnityEngine.Input.GetKeyDown(KeyCode.Mouse0))
+	    if(UnityEngine.Input.GetKeyDown(KeyCode.Mouse0) && interactable)
         {
             if (current != null)
             {
@@ -211,7 +213,7 @@ public class GameManager : MonoBehaviour {
             first = null;
         }
 
-        if(UnityEngine.Input.GetKeyDown(KeyCode.Mouse0))
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0) && interactable)
         {
             if(currentComponent!=null)
             {
