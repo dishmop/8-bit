@@ -68,6 +68,10 @@ public class menuItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
                 {
                     GameManager.instance.LoadLevel(2);
                 }
+                else if (itemlevel.name == "HADDER")
+                {
+                    GameManager.instance.LoadLevel(3);
+                }
                 else
                 {
                     GameManager.instance.LoadLevel(1);

@@ -78,6 +78,7 @@
     <Compile Include="Assets\Scripts\InputOutputConnectorComponent.cs" />
     <Compile Include="Assets\Scripts\Interface\BackToMenu.cs" />
     <Compile Include="Assets\Scripts\Interface\Clock.cs" />
+    <Compile Include="Assets\Scripts\Interface\HadderTutorial.cs" />
     <Compile Include="Assets\Scripts\Interface\HintButton.cs" />
     <Compile Include="Assets\Scripts\Interface\InputOutputCollider.cs" />
     <Compile Include="Assets\Scripts\Interface\InstructionText.cs" />

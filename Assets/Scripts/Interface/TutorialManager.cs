@@ -23,6 +23,8 @@ public class TutorialManager : MonoBehaviour {
         LogicGates2,
         LogicGates3,
         LogicGates4,
+        Level1,
+        Level2,
         Inputs1,
         Inputs2,
         Inputs3,
@@ -32,6 +34,8 @@ public class TutorialManager : MonoBehaviour {
         Components4,
         Components5,
         Components6,
+        Delete1,
+        Delete2,
         Connect1,
         Connect2,
         Connect3,
@@ -84,6 +88,12 @@ public class TutorialManager : MonoBehaviour {
             case step.LogicGates4:
                 DisplayUIText("These inputs and outputs can be either on or off.", true);
                 break;
+            case step.Level1:
+                DisplayUIText("On this level, we are hold to make a NOT gate (above).", true);
+                break;
+            case step.Level2:
+                DisplayUIText("A NOT gate's output is the opposite of its input.", true);
+                break;
             case step.Inputs1:
                 DisplayUIText("In this game, we use green for on and grey for off.", true);
                 break;
@@ -92,7 +102,7 @@ public class TutorialManager : MonoBehaviour {
                 DontDisplayUIText();
                 break;
             case step.Inputs3:
-                DisplayUILowText("Try clicking on the input to turn it on.", false);
+                DisplayUILowText("Try clicking on the input below to turn it on.", false);
                 BlockUI.SetActive(false);
 
                 if (GameManager.instance.topComponent.inputs[0] == true)
@@ -133,6 +143,46 @@ public class TutorialManager : MonoBehaviour {
                 else
                 {
                     okframes = 0;
+                }
+                break;
+            case step.Delete1:
+                DisplayUIText("You can delete it by dragging it off the screen", false);
+                BlockUI.SetActive(false);
+
+
+
+                if (GameManager.instance.topComponent.gate.gates[0].gates.Count == 0 && !UnityEngine.Input.GetMouseButton(0))
+                {
+                    okframes++;
+                }
+                else
+                {
+                    okframes = 0;
+                }
+
+                if (okframes > 3)
+                {
+                    currentstep++;
+                }
+                break;
+            case step.Delete2:
+                DisplayUIText("Actually, we needed that, make another one.", false);
+                BlockUI.SetActive(false);
+
+
+                if (GameManager.instance.topComponent.gate.gates[0].gates.Count == 1 && !UnityEngine.Input.GetMouseButton(0))
+                {
+                    okframes++;
+                }
+                else
+                {
+                    okframes = 0;
+                }
+
+
+                if (okframes > 3)
+                {
+                    currentstep++;
                 }
                 break;
             case step.Connect1:
@@ -178,7 +228,7 @@ public class TutorialManager : MonoBehaviour {
                 BlockUI.SetActive(true);
                 break;
             case step.Test1:
-                DisplayUILowText("Try it!", false);
+                DisplayUILowText("Try it! (toggle the input below)", false);
                 DontDisplayUIText();
                 BlockUI.SetActive(false);
 
