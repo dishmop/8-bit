@@ -267,6 +267,13 @@ public class GameManager : MonoBehaviour {
         hitcollider = hit.collider;
 
         VectorLine.canvas.sortingOrder = -1;
+
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
+        {
+            string xml;
+            GameManager.instance.topComponent.Save(out xml);
+            Debug.Log(xml);
+        }
 	}
 
     public void LoadLevel(int num)

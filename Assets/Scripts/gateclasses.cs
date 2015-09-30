@@ -626,10 +626,10 @@ public class Gate {
 
         document.LoadXml(xml);
 
-        return Load(document.ChildNodes[document.ChildNodes.Count-1]);
+        return Load(document.ChildNodes[document.ChildNodes.Count-1], true);
     }
 
-    public GateComponent Load(XmlNode node)
+    public GateComponent Load(XmlNode node, bool toplevel)
     {
         GateComponent newcomponent = null;
         Dictionary<int, int> oldToNewGates = new Dictionary<int, int>();
@@ -678,10 +678,19 @@ public class Gate {
                 Gate gate = newcomponent.gate;
                 
                 int gateNum = 0;
-                while (gates.ContainsKey(gateNum))
+
+                if (toplevel)
                 {
-                    gateNum++;
+                    while (gates.ContainsKey(gateNum))
+                    {
+                        gateNum++;
+                    }
                 }
+                else
+                {
+                    gateNum = System.Int32.Parse(child.Attributes["index"].Value);
+                }
+
                 gates.Add(gateNum, gate);
                 gate.gateNum = gateNum;
 
@@ -690,7 +699,7 @@ public class Gate {
 
                 oldToNewGates.Add(System.Int32.Parse(child.Attributes["index"].Value), gateNum);
 
-                gate.Load(child);
+                gate.Load(child, false);
             }
         }
 
@@ -703,8 +712,13 @@ public class Gate {
                 input.parentGate = this;
                 input.Load(child, oldToNewGates);
 
-                int num = 0;
-                while (childInputs.ContainsKey(num)) num++;
+                int num = System.Int32.Parse(child.Attributes["index"].Value);
+
+                if (toplevel)
+                {
+                    num = 0;
+                    while (childInputs.ContainsKey(num)) num++;
+                }
                 childInputs.Add(num, input);
                 oldToNewInputs.Add(System.Int32.Parse(child.Attributes["index"].Value),num);
                
@@ -716,8 +730,12 @@ public class Gate {
                 output.parentGate = this;
                 output.Load(child, oldToNewGates);
 
-                int num = 0;
-                while (childOutputs.ContainsKey(num)) num++;
+                int num = System.Int32.Parse(child.Attributes["index"].Value);
+                if (toplevel)
+                {
+                    num = 0;
+                    while (childOutputs.ContainsKey(num)) num++;
+                }
                 childOutputs.Add(num, output);
                 oldToNewOutputs.Add(System.Int32.Parse(child.Attributes["index"].Value), num);
             }
@@ -750,7 +768,14 @@ public class Gate {
                 InputInputConnector connector = (InputInputConnector)component.connector;
                 connector.parentGate = this;
 
-                connectors.Add(System.Int32.Parse(child.Attributes["index"].Value), connector);
+                int num = System.Int32.Parse(child.Attributes["index"].Value);
+                if (toplevel)
+                {
+                    num = 0;
+                    while (connectors.ContainsKey(num)) num++;
+                }
+
+                connectors.Add(num, connector);
                 connector.connectorNum = System.Int32.Parse(child.Attributes["index"].Value);
 
                 connector.input = System.Int32.Parse(child.Attributes["input"].Value);
@@ -767,7 +792,14 @@ public class Gate {
                 InputOutputConnector connector = (InputOutputConnector)component.connector;
                 connector.parentGate = this;
 
-                connectors.Add(System.Int32.Parse(child.Attributes["index"].Value), connector);
+                int num = System.Int32.Parse(child.Attributes["index"].Value);
+                if (toplevel)
+                {
+                    num = 0;
+                    while (connectors.ContainsKey(num)) num++;
+                }
+
+                connectors.Add(num, connector);
                 connector.connectorNum = System.Int32.Parse(child.Attributes["index"].Value);
 
 
@@ -784,7 +816,14 @@ public class Gate {
                 OutputOutputConnector connector = (OutputOutputConnector)component.connector;
                 connector.parentGate = this;
 
-                connectors.Add(System.Int32.Parse(child.Attributes["index"].Value), connector);
+                int num = System.Int32.Parse(child.Attributes["index"].Value);
+                if (toplevel)
+                {
+                    num = 0;
+                    while (connectors.ContainsKey(num)) num++;
+                }
+
+                connectors.Add(num, connector);
                 connector.connectorNum = System.Int32.Parse(child.Attributes["index"].Value);
 
 

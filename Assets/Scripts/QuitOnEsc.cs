@@ -5,6 +5,10 @@ public class QuitOnEsc : MonoBehaviour
 
     public string OnQuitLevelName;
 
+    //public void Start()
+    //{
+    //    Debug.Log(PlayerPrefs.GetString("HADDER"));
+    //}
 
     // Update is called once per frame
     void Update()

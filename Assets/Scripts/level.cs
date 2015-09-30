@@ -84,7 +84,6 @@ abstract public class Level
 
     void Succeeded()
     {
-        //Application.LoadLevel(2);
         string xml;
         GameManager.instance.topComponent.Save(out xml);
         PlayerPrefs.SetString(name, xml);
@@ -815,7 +814,7 @@ public class AdderLevel : Level
         name = "FADDER";
         spritenum = 15;
 
-        prerequisites = new Level[] { new XorLevel(), new AndLevel() };
+        prerequisites = new Level[] { new HadderLevel() };
 
         hint = "Use two half-adders, and OR the carry.";
 
