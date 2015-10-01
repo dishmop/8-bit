@@ -72,6 +72,10 @@ public class menuItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
                 {
                     GameManager.instance.LoadLevel(3);
                 }
+                else if (itemlevel.name == "SR")
+                {
+                    GameManager.instance.LoadLevel(4);
+                }
                 else
                 {
                     GameManager.instance.LoadLevel(1);

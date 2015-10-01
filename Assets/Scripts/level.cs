@@ -871,6 +871,94 @@ public class AdderLevel : Level
     }
 }
 
+public class Adder2Level : Level
+{
+    public Adder2Level()
+    {
+        numInputs = 4;
+        numOutputs = 3;
+
+        description = "2-bit adder. Adds two two-bit numbers.";
+        name = "ADDER2";
+        spritenum = 16;
+
+        prerequisites = new Level[] { new AdderLevel() };
+
+        hint = "Add A0 and B0 with a half-adder, then send the sum to output 0. Send the carry to a full adder, with A1 and B1, and send the sum to output 1 and the carry to output 2";
+
+        inputName[0] = "A0";
+        inputName[1] = "B0";
+        inputName[2] = "A1";
+        inputName[3] = "B1";
+        outputName[0] = "0";
+        outputName[1] = "1";
+        outputName[2] = "2";
+
+        inputMap = new int[] { 2, 0, 3, 1 };
+        outputMap = new int[] { 3, 2, 1, 0 };
+    }
+
+
+    protected override bool Test()
+    {
+        switch (currentStep)
+        {
+            case 0:
+                testConfiguration(new bool[] { false,false,false,false }, new bool[] { false, false, false });
+                break;
+            case 1:
+                testConfiguration(new bool[] { true, false, false, false }, new bool[] { true, false, false });
+                break;
+            case 2:
+                testConfiguration(new bool[] { false, true, false, false }, new bool[] { true, false, false });
+                break;
+            case 3:
+                testConfiguration(new bool[] { false, false, true, false }, new bool[] { false, true, false });
+                break;
+            case 4:
+                testConfiguration(new bool[] { false, false, false, true }, new bool[] { false, true, false });
+                break;
+            case 5:
+                testConfiguration(new bool[] { true, false, true, false }, new bool[] { true, true, false });
+                break;
+            case 6:
+                testConfiguration(new bool[] { false, true, true, false }, new bool[] { true, true, false });
+                break;
+            case 7:
+                testConfiguration(new bool[] { true, true, true, false }, new bool[] { false, false, true });
+                break;
+            case 8:
+                testConfiguration(new bool[] { true, false, false, true }, new bool[] { true, true, false });
+                break;
+            case 9:
+                testConfiguration(new bool[] { false, true, false, true }, new bool[] { true, true, false });
+                break;
+            case 10:
+                testConfiguration(new bool[] { false, false, true, true }, new bool[] { false, false, true });
+                break;
+            case 11:
+                testConfiguration(new bool[] { true, false, true, true }, new bool[] { true, false, true });
+                break;
+            case 12:
+                testConfiguration(new bool[] { false, true, true, true }, new bool[] { true, false, true });
+                break;
+            case 13:
+                testConfiguration(new bool[] { true, true, true, true }, new bool[] { false, true, true });
+                break;
+            case 14:
+                testConfiguration(new bool[] { true, true, false, false }, new bool[] { false, true, false });
+                break;
+            case 15:
+                testConfiguration(new bool[] { true, true, false, true }, new bool[] { false, false, true });
+                break;
+            case 16:
+                return true;
+        }
+
+        return false;
+    }
+}
+
 
 public class NandLevel : Level
 {

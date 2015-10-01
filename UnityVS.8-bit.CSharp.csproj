@@ -92,6 +92,7 @@
     <Compile Include="Assets\Scripts\Interface\TestingPanel.cs" />
     <Compile Include="Assets\Scripts\Interface\ToolTip.cs" />
     <Compile Include="Assets\Scripts\Interface\TutorialManager.cs" />
+    <Compile Include="Assets\Scripts\Interface\latchtutorial.cs" />
     <Compile Include="Assets\Scripts\Interface\menuItem.cs" />
     <Compile Include="Assets\Scripts\NAND.cs" />
     <Compile Include="Assets\Scripts\OutputOutputConnectorComponent.cs" />

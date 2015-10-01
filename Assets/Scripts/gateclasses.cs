@@ -15,6 +15,8 @@ public abstract class Connector
     abstract public void Save(XmlWriter writer, int indexx);
 
     abstract public void Remove();
+
+    public virtual void Update() { }
 }
 
 public class InputOutputConnector : Connector {
@@ -93,9 +95,19 @@ public class OutputOutputConnector : Connector
     public int childOuput = -1;
     public int output = -1;
 
+    //bool isonlast1 = false;
+    //bool isonlast2 = false;
+    //bool isonlast3 = false;
+
     public override bool IsOn
     {
-        get { return parentGate.childOutputs[output].IsOn; }
+        get {
+            //if (isonlast1 != parentGate.childOutputs[output].IsOn && isonlast2 == parentGate.childOutputs[output].IsOn && isonlast3 != parentGate.childOutputs[output].IsOn)
+            //{
+            //    return false;
+            //}
+            return parentGate.childOutputs[output].IsOn; 
+        }
     }
 
     public override void Save(XmlWriter writer, int index)
@@ -141,6 +153,12 @@ public class OutputOutputConnector : Connector
         parentGate.connectors.Remove(connectorNum);
     }
 
+    //public override void Update()
+    //{
+    //    isonlast3 = isonlast2;
+    //    isonlast2 = isonlast1;
+    //    isonlast1 = parentGate.childOutputs[output].IsOn;
+    //}
 }
 
 public class Input
@@ -515,6 +533,11 @@ public class Gate {
         foreach (KeyValuePair<int, Gate> gate in gates)
         {
             gate.Value.LateUpdate();
+        }
+
+        foreach (var connector in connectors)
+        {
+            connector.Value.Update();
         }
     }
 

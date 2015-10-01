@@ -8,6 +8,9 @@ public class InputOutputCollider : MonoBehaviour {
 
     public bool visible = true;
 
+    public TextMesh inputText;
+    public TextMesh outputText;
+
     //bool mouseOver;
 	
 	void Update()
@@ -32,5 +35,22 @@ public class InputOutputCollider : MonoBehaviour {
             GetComponent<Renderer>().enabled = false;
             GetComponent<Collider2D>().enabled = false;
         }
+
+        if (attachedGate == GameManager.instance.topComponent.gate.gates[0])
+        {
+            if (isInput)
+            {
+                outputText.gameObject.SetActive( false);
+                inputText.text = Level.instance.inputName[inputOutputNum];
+            }
+            else
+            {
+                inputText.gameObject.SetActive( false);
+                outputText.text = Level.instance.outputName[inputOutputNum];
+            }
+        } else {
+                inputText.gameObject.SetActive( false);
+                outputText.gameObject.SetActive( false);
+            }
     }
 }

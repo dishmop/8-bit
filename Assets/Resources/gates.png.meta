@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 744997e26b26c1241b351386c2491a38
-timeCreated: 1443019270
+timeCreated: 1443698459
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -20,6 +20,7 @@ TextureImporter:
     21300026: gates_13
     21300028: gates_14
     21300030: gates_15
+    21300032: gates_16
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -69,7 +70,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 384
+        y: 896
         width: 128
         height: 128
       alignment: 0
@@ -79,7 +80,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 128
-        y: 384
+        y: 896
         width: 128
         height: 128
       alignment: 0
@@ -89,7 +90,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 256
-        y: 384
+        y: 896
         width: 128
         height: 128
       alignment: 0
@@ -99,7 +100,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 384
-        y: 384
+        y: 896
         width: 128
         height: 128
       alignment: 0
@@ -109,7 +110,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 256
+        y: 768
         width: 128
         height: 128
       alignment: 0
@@ -119,7 +120,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 128
-        y: 256
+        y: 768
         width: 128
         height: 128
       alignment: 0
@@ -129,7 +130,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 256
-        y: 256
+        y: 768
         width: 128
         height: 128
       alignment: 0
@@ -139,7 +140,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 384
-        y: 256
+        y: 768
         width: 128
         height: 128
       alignment: 0
@@ -149,7 +150,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 128
+        y: 640
         width: 128
         height: 128
       alignment: 0
@@ -159,7 +160,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 128
-        y: 128
+        y: 640
         width: 128
         height: 128
       alignment: 0
@@ -169,7 +170,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 256
-        y: 128
+        y: 640
         width: 128
         height: 128
       alignment: 0
@@ -179,7 +180,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 384
-        y: 128
+        y: 640
         width: 128
         height: 128
       alignment: 0
@@ -189,7 +190,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 512
         width: 128
         height: 128
       alignment: 0
@@ -199,7 +200,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 128
-        y: 0
+        y: 512
         width: 128
         height: 128
       alignment: 0
@@ -209,7 +210,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 256
-        y: 0
+        y: 512
         width: 128
         height: 128
       alignment: 0
@@ -219,7 +220,17 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 384
-        y: 0
+        y: 512
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gates_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 384
         width: 128
         height: 128
       alignment: 0
