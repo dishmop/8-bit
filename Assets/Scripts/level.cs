@@ -16,6 +16,9 @@ abstract public class Level
     public string[] inputName = {"1","2","3","4"};
     public string[] outputName = {"1", "2", "3", "4"};
 
+    public int[] inputMap = { 0, 1, 2, 3 };
+    public int[] outputMap = { 0, 1, 2, 3 };
+
     public string name;
 
     public string hint;
@@ -776,6 +779,9 @@ public class HadderLevel : Level
         inputName[1] = "B";
         outputName[0] = "S";
         outputName[1] = "C";
+
+        inputMap = new int[] { 0, 2, 1, 3 };
+        outputMap = new int[] { 3, 2, 1, 0 };
     }
 
 
@@ -810,7 +816,7 @@ public class AdderLevel : Level
         numInputs = 3;
         numOutputs = 2;
 
-        description = "Full Adder. Adds the inputs, and carries a bit if necessary.";
+        description = "Full Adder. Adds three inputs, and carries a bit if necessary.";
         name = "FADDER";
         spritenum = 15;
 
@@ -823,6 +829,9 @@ public class AdderLevel : Level
         inputName[2] = "C";
         outputName[0] = "S";
         outputName[1] = "C";
+
+        inputMap = new int[] { 0, 1, 2, 3 };
+        outputMap = new int[] { 3, 2, 1, 0 };
     }
 
 

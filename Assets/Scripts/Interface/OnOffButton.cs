@@ -13,24 +13,34 @@ public class OnOffButton : MonoBehaviour {
     public KeyCode key;
 
     Text displaytext;
+    Text valuetext;
 
     Image image;
 	// Use this for initialization
 	void Start () {
         image = GetComponent<Image>();
-        displaytext = GetComponentInChildren<Text>();
+        foreach(var text in GetComponentsInChildren<Text>()){
+            if (text.gameObject.name == "valuetext")
+            {
+                valuetext = text;
+            }
+            else
+            {
+                displaytext = text;
+            }
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
         if(outputNum>=0)
         {
-            if (GameManager.instance.topComponent.gate.childOutputs.ContainsKey(outputNum))
+            if (GameManager.instance.topComponent.gate.childOutputs.ContainsKey(Level.instance.outputMap[outputNum]))
             {
-                isOn = GameManager.instance.topComponent.gate.childOutputs[outputNum].IsOn;
+                isOn = GameManager.instance.topComponent.gate.childOutputs[Level.instance.outputMap[outputNum]].IsOn;
                 enabled = true;
 
-                displaytext.text = Level.instance.outputName[outputNum];
+                displaytext.text = Level.instance.outputName[Level.instance.outputMap[outputNum]];
             }
             else
             {
@@ -40,13 +50,13 @@ public class OnOffButton : MonoBehaviour {
 
         if(inputNum>=0)
         {
-            if(GameManager.instance.topComponent.inputs.Count>inputNum)
+            if(GameManager.instance.topComponent.inputs.Count>Level.instance.inputMap[inputNum])
             {
                 enabled = true;
 
-                isOn = GameManager.instance.topComponent.inputs[inputNum];
+                isOn = GameManager.instance.topComponent.inputs[Level.instance.inputMap[inputNum]];
 
-                displaytext.text = Level.instance.inputName[inputNum];
+                displaytext.text = Level.instance.inputName[Level.instance.inputMap[inputNum]];
             }
             else
             {
@@ -70,25 +80,34 @@ public class OnOffButton : MonoBehaviour {
             image.color = Color.black;
         }
 
-        if (inputNum >= 0 && UnityEngine.Input.GetKeyDown(key) && GameManager.instance.topComponent.inputs.Count > inputNum)
+        if (inputNum >= 0 && UnityEngine.Input.GetKeyDown(key) && GameManager.instance.topComponent.inputs.Count > Level.instance.inputMap[inputNum])
         {
             isOn = true;
-            GameManager.instance.topComponent.inputs[inputNum] = isOn;
+            GameManager.instance.topComponent.inputs[Level.instance.inputMap[inputNum]] = isOn;
         }
 
-        if (inputNum >= 0 && UnityEngine.Input.GetKeyUp(key) && GameManager.instance.topComponent.inputs.Count > inputNum)
+        if (inputNum >= 0 && UnityEngine.Input.GetKeyUp(key) && GameManager.instance.topComponent.inputs.Count > Level.instance.inputMap[inputNum])
         {
             isOn = false;
-            GameManager.instance.topComponent.inputs[inputNum] = isOn;
+            GameManager.instance.topComponent.inputs[Level.instance.inputMap[inputNum]] = isOn;
+        }
+
+        if (isOn)
+        {
+            valuetext.text = "1";
+        }
+        else
+        {
+            valuetext.text = "0";
         }
 	}
 
     public void OnClick()
     {
-        if(inputNum>=0 && enabled)
+        if (inputNum >= 0 && enabled)
         {
             isOn = !isOn;
-            GameManager.instance.topComponent.inputs[inputNum] = isOn;
+            GameManager.instance.topComponent.inputs[Level.instance.inputMap[inputNum]] = isOn;
         }
     }
 }
