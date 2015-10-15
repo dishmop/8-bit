@@ -1,10 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Interface/SetupResolution.cs">
-    <Files>
-      <File FileName="../Leccy/Assets/Scripts/SetupResolution.cs" Line="7" Column="13" />
-      <File FileName="Assets/Scripts/Interface/SetupResolution.cs" Line="31" Column="2" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
