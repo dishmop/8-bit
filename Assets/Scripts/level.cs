@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 // each Level represents a component which can be used, and an associated xml file. These are saved when each level is completed
 abstract public class Level
@@ -28,6 +29,9 @@ abstract public class Level
     public Level[] prerequisites;
 
     public string description;
+    
+    public float startTime;
+	public int numTestAttempts;
     
     public bool Done()
     {
@@ -59,6 +63,15 @@ abstract public class Level
             {
                 testing = false;
                 Succeeded();
+				++numTestAttempts;
+				Analytics.CustomEvent("testSucceeded", new Dictionary<string, object>
+				{
+					{ "levelName", name },
+					{ "levelTime", Time.time - startTime},
+					{ "numTestAttempts", numTestAttempts},
+				});		
+//				Debug.Log("Analytics: testSucceeded - levelName: " + name + ", levelTime: " + (Time.time - startTime) + ", numTestAttempts: " + numTestAttempts);
+				
             }
 
             frames++;
@@ -67,12 +80,24 @@ abstract public class Level
             {
                 Failed();
                 testing = false;
+                
+				++numTestAttempts;
+				Analytics.CustomEvent("testFailed", new Dictionary<string, object>
+				{
+					{ "levelName", name },
+					{ "levelTime", Time.time - startTime},
+					{ "numTestAttempts", numTestAttempts},
+				});		
+//				Debug.Log("Analytics: testFailed - levelName: " + name + ", levelTime: " + (Time.time - startTime) + ", numTestAttempts: " + numTestAttempts);
+				
+				
             }
         }
         else
         {
             //if (GameManager.instance.testingPanel!=null)
             //GameManager.instance.testingPanel.SetActive(false);
+            
 
             frames = 0;
         }
