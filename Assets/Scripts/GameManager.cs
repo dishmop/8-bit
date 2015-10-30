@@ -281,7 +281,7 @@ public class GameManager : MonoBehaviour {
     public void LoadLevel(int num)
     {
     	if (num == 0){
-			GoogleAnalytics.Client.SendTimedEventHit("gamePlay", "quitGame", Level.instance.name, Time.time - Level.instance.startTime);
+			GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "quitGame", Level.instance.name, Time.time - Level.instance.startTime);
 //			Analytics.CustomEvent("levelQuit", new Dictionary<string, object>
 //			                      {
 //				{ "levelName", Level.instance.name },

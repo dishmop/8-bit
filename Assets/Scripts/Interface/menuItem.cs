@@ -68,7 +68,7 @@ public class menuItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 				Level.instance.startTime = Time.time;
 				Level.instance.numTestAttempts = 0;
 				
-				GoogleAnalytics.Client.SendEventHit("gamePlay", "levelStart", itemlevel.name);
+				GoogleAnalytics.Client.SendEventHit("gameFlow", "levelStart", itemlevel.name);
 //				Analytics.CustomEvent("levelStart", new Dictionary<string, object>
 //				                      {
 //					{ "levelName", itemlevel.name },
