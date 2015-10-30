@@ -2,8 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
-using UnityEngine.Analytics;
+//using System.Collections.Generic;
+//using UnityEngine.Analytics;
 
 public class menuItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
     public Image image;
@@ -68,10 +68,11 @@ public class menuItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 				Level.instance.startTime = Time.time;
 				Level.instance.numTestAttempts = 0;
 				
-				Analytics.CustomEvent("levelStart", new Dictionary<string, object>
-				                      {
-					{ "levelName", itemlevel.name },
-				});		
+				GoogleAnalytics.Client.SendEventHit("gamePlay", "levelStart", itemlevel.name);
+//				Analytics.CustomEvent("levelStart", new Dictionary<string, object>
+//				                      {
+//					{ "levelName", itemlevel.name },
+//				});		
 //				Debug.Log("Analytics: levelStart - levelName: " + itemlevel.name);
 				
                 

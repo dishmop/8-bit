@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
-using UnityEngine.Analytics;
+//using UnityEngine.Analytics;
 
 using Vectrosity;
 
@@ -281,11 +281,12 @@ public class GameManager : MonoBehaviour {
     public void LoadLevel(int num)
     {
     	if (num == 0){
-			Analytics.CustomEvent("levelQuit", new Dictionary<string, object>
-			                      {
-				{ "levelName", Level.instance.name },
-				{ "levelTime", Time.time - Level.instance.startTime},
-			});		
+			GoogleAnalytics.Client.SendTimedEventHit("gamePlay", "quitGame", Level.instance.name, Time.time - Level.instance.startTime);
+//			Analytics.CustomEvent("levelQuit", new Dictionary<string, object>
+//			                      {
+//				{ "levelName", Level.instance.name },
+//				{ "levelTime", Time.time - Level.instance.startTime},
+//			});		
 //			Debug.Log("Analytics: levelQuit - levelName: " + Level.instance.name + ", levelTime: " + (Time.time - Level.instance.startTime));
 			
     	}

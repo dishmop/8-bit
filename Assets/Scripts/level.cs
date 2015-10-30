@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Analytics;
+//using UnityEngine.Analytics;
 
 // each Level represents a component which can be used, and an associated xml file. These are saved when each level is completed
 abstract public class Level
@@ -64,12 +64,17 @@ abstract public class Level
                 testing = false;
                 Succeeded();
 				++numTestAttempts;
-				Analytics.CustomEvent("testSucceeded", new Dictionary<string, object>
-				{
-					{ "levelName", name },
-					{ "levelTime", Time.time - startTime},
-					{ "numTestAttempts", numTestAttempts},
-				});		
+				
+				
+				GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "testSucceeded", name, Time.time - startTime);
+				GoogleAnalytics.Client.SendScreenHit("testSucceeded_" + name);
+//								
+//				Analytics.CustomEvent("testSucceeded", new Dictionary<string, object>
+//				{
+//					{ "levelName", name },
+//					{ "levelTime", Time.time - startTime},
+//					{ "numTestAttempts", numTestAttempts},
+//				});		
 //				Debug.Log("Analytics: testSucceeded - levelName: " + name + ", levelTime: " + (Time.time - startTime) + ", numTestAttempts: " + numTestAttempts);
 				
             }
@@ -82,12 +87,16 @@ abstract public class Level
                 testing = false;
                 
 				++numTestAttempts;
-				Analytics.CustomEvent("testFailed", new Dictionary<string, object>
-				{
-					{ "levelName", name },
-					{ "levelTime", Time.time - startTime},
-					{ "numTestAttempts", numTestAttempts},
-				});		
+				
+				
+				GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "testFailed", name, Time.time - startTime);
+//								
+//				Analytics.CustomEvent("testFailed", new Dictionary<string, object>
+//				{
+//					{ "levelName", name },
+//					{ "levelTime", Time.time - startTime},
+//					{ "numTestAttempts", numTestAttempts},
+//				});		
 //				Debug.Log("Analytics: testFailed - levelName: " + name + ", levelTime: " + (Time.time - startTime) + ", numTestAttempts: " + numTestAttempts);
 				
 				
