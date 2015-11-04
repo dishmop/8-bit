@@ -89,7 +89,7 @@ public class TutorialManager : MonoBehaviour {
                 DisplayUIText("These inputs and outputs can be either on or off.", true);
                 break;
             case step.Level1:
-                DisplayUIText("On this level, we are hold to make a NOT gate (above).", true);
+                DisplayUIText("On this level, we are told to make a NOT gate (above).", true);
                 break;
             case step.Level2:
                 DisplayUIText("A NOT gate's output is the opposite of its input.", true);
